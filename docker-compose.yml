@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+
+ mongodb_server:
+    container_name: todo-app-db
+    hostname: todo-app-db
+    image: mongo:4.2.6
+    env_file: './app/db/dev.env'
+    volumes:
+      - ./app/db/local.mongod.conf:/etc/mongod.conf
+      - ./app/db/log:/var/log/mongodb/
+    ports:
+      - '27017:27017'
+    networks:
+      - todo-app-dev
+    command: ["-f", "/etc/mongod.conf"]  
+
+networks:
+  todo-app-dev:  
