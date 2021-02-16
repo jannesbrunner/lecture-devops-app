@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
 
- mongodb_server:
+  todo-app-db:
     container_name: todo-app-db
     hostname: todo-app-db
     image: mongo:4.2.6
@@ -15,6 +15,18 @@ services:
     networks:
       - todo-app-dev
     command: ["-f", "/etc/mongod.conf"]  
+
+  todo-app-server:
+    container_name: todo-app-server
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - todo-app-dev      
+
+  
 
 networks:
   todo-app-dev:  
