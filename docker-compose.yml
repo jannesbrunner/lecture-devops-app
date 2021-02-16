@@ -16,21 +16,11 @@ services:
       - todo-app-dev
     command: ["-f", "/etc/mongod.conf"]  
 
-  todo-app-client:
-    container_name: todo-app-client
-    build:
-      context: ./app/client
-      dockerfile: dockerfile-client
-    ports:
-      - '80:80'
-    networks:
-      - todo-app-dev
-
   todo-app-server:
     container_name: todo-app-server
     build:
-      context: ./app/server
-      dockerfile: dockerfile-server
+      context: .
+      dockerfile: dockerfile
     ports:
       - '3000:3000'
     networks:
