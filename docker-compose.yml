@@ -2,7 +2,17 @@ version: '3.9'
 
 services:
 
- mongodb_server:
+  todo-app-client:
+    container_name: todo-app-client
+    build:
+      context: ./app/client
+      dockerfile: dockerfile
+    ports:
+      - '8080:8080'
+    networks:
+      - todo-app-dev
+
+  todo-app-db:
     container_name: todo-app-db
     hostname: todo-app-db
     image: mongo:4.2.6
