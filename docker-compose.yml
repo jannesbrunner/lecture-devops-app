@@ -2,16 +2,6 @@ version: '3.9'
 
 services:
 
-  todo-app-client:
-    container_name: todo-app-client
-    build:
-      context: ./app/client
-      dockerfile: dockerfile
-    ports:
-      - '8080:8080'
-    networks:
-      - todo-app-dev
-
   todo-app-db:
     container_name: todo-app-db
     hostname: todo-app-db
@@ -25,6 +15,28 @@ services:
     networks:
       - todo-app-dev
     command: ["-f", "/etc/mongod.conf"]  
+
+  todo-app-client:
+    container_name: todo-app-client
+    build:
+      context: ./app/client
+      dockerfile: dockerfile-client
+    ports:
+      - '80:80'
+    networks:
+      - todo-app-dev
+
+  todo-app-server:
+    container_name: todo-app-server
+    build:
+      context: ./app/server
+      dockerfile: dockerfile-server
+    ports:
+      - '3000:3000'
+    networks:
+      - todo-app-dev      
+
+  
 
 networks:
   todo-app-dev:  
