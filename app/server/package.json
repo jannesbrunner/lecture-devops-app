@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "env-cmd -f ./dev.env nodemon src/index.js",
+    "start:container-dev": "env-cmd -f ./dev.container.env nodemon src/index.js",
     "test": "jest --ci",
     "test:dev": "env-cmd -f ./dev.env jest"
   },
