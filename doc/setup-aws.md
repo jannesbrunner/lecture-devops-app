@@ -45,3 +45,6 @@ programmatic and console access.
 - This ECR will store builds of the todo-app server 
 - - builds come from production and staging environment
 - - builds are tagged with git commit SHA and also latest (for latest build)
+
+### Continue with terraform setup
+[go to terraform setup documentation](./setup-terraform.md)
