@@ -1,6 +1,7 @@
 # Setup Terraform
 
-**Complete the [AWS Setup](./setup-aws.md) before setting up terraform!**
+**Complete the [AWS Setup](./setup-aws.md) before setting up terraform!** <br/>
+- There is a make file provided in the project root folder for shortcuting commands
 
 ## 1 Configure terraform backend
 Set the AWS S3 Bucket name and dynamodb table name in [main.tf](../deploy/main.tf)
@@ -32,6 +33,7 @@ terraform {
 - - Make sure your credentials are set correctly in `$HOME/.aws`
 
 </br>
+
 **AWS Student account: You need to update the credentials every time you start a new session!**
 
 - There are scripts for `mac/linux` and `windows` systems for handy use:
@@ -41,9 +43,11 @@ terraform {
 - **Remember to refresh all terminal windows in order to user the env vars!**
 - *Personal note: On windows you need to restart VS Code if in use :)*
 
+- type `make aws-win` ||  `make aws-mac` to update your aws env vars credentials easily 
+
 
 ## 3 init terraform
-- There is a make file provided in the root folder
+
 - type `make tf-init` to init the project 
 - This will use a terraform in a docker container 
 - type `terraform init` to use your local terraform version
