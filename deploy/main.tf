@@ -16,4 +16,11 @@ provider "aws" {
 # dynamic variables in tf are locals
 locals {
   prefix = "${var.prefix}-${terraform.workspace}"
+  # These common tags will be displayed in AWS etc.
+  common_tags = {
+    Environment = terraform.workspace
+    Project     = var.project
+    Owner       = var.contact
+    ManagedBy   = "Terraform"
+  }
 }

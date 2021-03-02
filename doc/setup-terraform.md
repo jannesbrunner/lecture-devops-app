@@ -53,7 +53,7 @@ terraform {
 - type `terraform init` to use your local terraform version
 
 
-## Set up terraform workspaces (= environments)
+## 4 Set up terraform workspaces (= environments)
 
 - Set up Staging environment:
 - - type `terraform workspace new staging` (local terraform version)
@@ -62,4 +62,7 @@ terraform {
 - - type `terraform workspace new production` (local terraform version)
 - - type `docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new prod` (docker version)
 
+## Optional
+- You can update project meta data in [variables.tf](../deploy/variables.tf) if you want to.
+- these variables and tags data get attached to all created resources in AWS for easy management.
 
