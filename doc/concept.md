@@ -20,6 +20,11 @@ Briefly:
 - Production 2: cloud development environment for new new production builds.
 - - Managed by Terraform
 
+Each Cloud Environment (No. 1 and No. 2) has a Bastion Server.
+This Bastion Server is for connecting into the private network part of the
+environment (inside AWS) for administration purposes. This is a small 
+linux running machine of a small type (t2.micro). 
+
 ### Local 0
 
 #### Description
