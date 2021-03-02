@@ -51,3 +51,15 @@ terraform {
 - type `make tf-init` to init the project 
 - This will use a terraform in a docker container 
 - type `terraform init` to use your local terraform version
+
+
+## Set up terraform workspaces (= environments)
+
+- Set up Staging environment:
+- - type `terraform workspace new staging` (local terraform version)
+- - type `docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new staging` (docker version)
+- Set up Production environment:
+- - type `terraform workspace new production` (local terraform version)
+- - type `docker-compose -f deploy/docker-compose.yml run --rm terraform workspace new prod` (docker version)
+
+

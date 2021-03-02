@@ -15,10 +15,10 @@ Briefly:
 - - Infrastructure runs in containers
 
 - Staging 1: cloud development environment for new features and (hot) fixes
-- - Managed by Terraform
+- - Managed by Terraform (via Terraform Workspace)
 
 - Production 2: cloud development environment for new new production builds.
-- - Managed by Terraform
+- - Managed by Terraform (via Terraform Workspace)
 
 Each Cloud Environment (No. 1 and No. 2) has a Bastion Server.
 This Bastion Server is for connecting into the private network part of the

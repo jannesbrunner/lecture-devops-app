@@ -28,6 +28,10 @@ tf-init:
 tf-fmt:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform fmt
 
+.PHONY: tf-workspace-ls
+tf-workspace-ls:
+	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace list
+
 .PHONY: tf-validate
 tf-validate:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform validate
@@ -55,5 +59,4 @@ tf-workspace-staging:
 .PHONY: tf-workspace-prod
 tf-workspace-prod:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform workspace select prod
-
 
