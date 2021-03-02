@@ -12,3 +12,8 @@ provider "aws" {
   region  = "us-east-1"
   version = "~> 2.54.0"
 }
+
+# dynamic variables in tf are locals
+locals {
+  prefix = "${var.prefix}-${terraform.workspace}"
+}
