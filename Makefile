@@ -20,6 +20,14 @@ aws-win:
 aws-mac:
 	./deploy/tools/set-aws-credentials.sh
 
+.PHONY: dev-start
+dev-start:
+	docker-compose up
+
+.PHONY: dev-purge
+dev-purge:
+	docker-compose down && docker-compose rm
+
 .PHONY: tf-init
 tf-init:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform init
