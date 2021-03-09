@@ -162,3 +162,8 @@ override.tf.json
 # example: *tfplan*
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform,node,react
+
+# Mongo DB Data
+app/db/data/*
+# Mongo Log
+app/db/log/*
