@@ -1,0 +1,81 @@
+stages:
+  - Test and Lint
+  - Build and Push
+  - Staging Plan
+  - Staging Apply
+  - Production Plan
+  - Production Apply
+  - Destroy
+
+Test and Lint:
+  stage: Test and Lint
+  script:
+    - echo "Test and Lint"
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
+
+Validate Terraform:
+  stage: Test and Lint
+  script:
+    - echo "Validate Terraform"
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
+
+Build and Push:
+  stage: Build and Push
+  script:
+  - echo "Build and Push Docker Image"
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
+    # We only want to Build and Push artifacts that survived test and lint.
+    # Therefore we only Build and Push after a merge request gets merged in (commit) -> no build and push on merge request creation!
+
+Staging Plan:
+  stage: Staging Plan
+  script:
+    - echo "Run Terraform Plan for Staging"
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
+    # master | production -> this makes sure that staging environment (master branch)
+    # will at least have the latest production terraform configuration
+
+Staging Apply:
+  stage: Staging Apply
+  script:
+    - echo "Run Terraform Apply for Staging"
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
+    # master | production -> this makes sure that staging environment (master branch)
+    # will at least have the latest production terraform configuration applied
+
+Production Plan:
+  stage: Production Plan
+  script:
+    - echo "Run Terraform Plan for Production"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+
+Production Apply:
+  stage: Production Apply
+  script:
+    - echo "Run Terraform Apply for Production"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+
+Staging Destroy:
+  stage: Destroy
+  script:
+    - echo "Run Terraform Destroy for Staging"
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
+      when: manual
+      # user triggered destroy of Staging Terraform environment
+
+Production Destroy:
+  stage: Destroy
+  script:
+    - echo "Run Terraform Destroy for Production"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+      when: manual
+      # user triggered destroy of Production Terraform environment
