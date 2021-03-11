@@ -16,9 +16,11 @@ Briefly:
 
 - Staging 1: cloud development environment for new features and (hot) fixes
 - - Managed by Terraform (via Terraform Workspace)
+- - Git Branch Master -> AWS Staging Environment
 
 - Production 2: cloud development environment for new new production builds.
 - - Managed by Terraform (via Terraform Workspace)
+- - Git Branch Production -> AWS Production Environment
 
 Each Cloud Environment (No. 1 and No. 2) has a Bastion Server.
 This Bastion Server is for connecting into the private network part of the
