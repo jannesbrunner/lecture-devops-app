@@ -37,7 +37,7 @@ Staging Plan:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
     # master | production -> this makes sure that staging environment (master branch)
-    # will at least have the latest production terraform configuration
+    # will at least always have the latest validated production terraform configuration
 
 Staging Apply:
   stage: Staging Apply
@@ -46,7 +46,7 @@ Staging Apply:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
     # master | production -> this makes sure that staging environment (master branch)
-    # will at least have the latest production terraform configuration applied
+    # will at least always have the latest production terraform configuration applied as well
 
 Production Plan:
   stage: Production Plan

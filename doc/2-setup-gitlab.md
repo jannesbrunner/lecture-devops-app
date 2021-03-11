@@ -19,13 +19,15 @@ In general: <br/>
 
 - When then Plan every changes (if any) to the staging and production environment managed by Terraform in __Staging Plan__ / __Production Plan__ stage
 - If successful we apply every changes (if any) to the staging and production environment managed by Terraform in __Staging Apply__ / __Production Apply__ stage
+- _Info_ Every terraform changes that get applied to the production environment will be applied to the staging environment as well. 
+- BUT NOT vice versa! This is a project policy.
 
 - __Destroy Stage__, this stage can get triggered manually via GitLab to destroy the whole production or staging environment on AWS via Terraform.
 
 
 There are 5 stages in the pipeline in total:
 
-Test and Lint -> Build and Push -> Staging/Production Plan -> Staging/Production Apply -> Destroy (Manual Trigger)
+Test and Lint -> Build and Push -> Staging _or_ Production Plan -> Staging _or_ Production Apply -> Destroy (Manual Trigger) (staging _or_ production environment)
 
 ### 1: Test and Lint
 
@@ -50,8 +52,6 @@ Therefore only Build and Push after a merge request gets merged in ( = commit) -
 
 _Triggered by_ : Commit -> __Master__ or __Production__ <br/>
 Hint: Master branch = Staging environment.
-master | production -> this makes sure that staging environment (master branch) <br/>
-
 
 - After successful _Test and Lint_ stage that is validating Terraform code (beside test/lint Server/Client part). 
 - Plan changes to Staging environment with terraform.
@@ -60,7 +60,6 @@ master | production -> this makes sure that staging environment (master branch) 
 
 _Triggered by_ : Commit -> __Master__ or __Production__ <br/>
 Hint: Master branch = Staging environment.
-master | production -> this makes sure that staging environment (master branch) <br/>
 
 - After successful _Test and Lint_ stage that is validating Terraform code. 
 - Plan changes to Staging environment with terraform.
