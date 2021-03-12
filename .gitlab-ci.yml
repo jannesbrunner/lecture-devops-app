@@ -7,6 +7,10 @@ stages:
   - Production Apply
   - Destroy
 
+# Stages can run following jobs concurrently
+
+# Jobs:
+
 Test and Lint:
   stage: Test and Lint
   script:
