@@ -12,9 +12,16 @@ stages:
 # Jobs:
 
 Test and Lint:
+  image: node:8.9.4
   stage: Test and Lint
   script:
-    - echo "Test and Lint"
+    - cd ./app/client
+    - npm install
+    - npm run test
+  cache:
+    paths:
+    - ./app/client/node_modules
+    - ./app/server/node_modules
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
