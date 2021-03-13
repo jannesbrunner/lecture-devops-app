@@ -29,13 +29,14 @@ Lint and Test Server:
   image: node:10.9.0-alpine
   stage: Test and Lint
   services:
-    - mongo:4.2.6
+    - name: mongo:4.2.6
+      alias: todo-app-db
+
   variables:
     DB_PORT: 27017
     DB_HOST: todo-app-db
     MONGODB_URL: mongodb://todo-app-db:27017/todo-app
   script:
-    - mongoimport --host $DB_HOST
     - cd ./app/server
     - npm install
     - npm run lint
