@@ -66,9 +66,12 @@ Validate Terraform:
 
 Build and Push:
   image: docker:latest
+  variables:
+    # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   services:
   - docker:19.03.0-dind
-    # See https://github.com/docker-library/docker/pull/166
   stage: Build and Push
   script:
     - apk add py3-pip
