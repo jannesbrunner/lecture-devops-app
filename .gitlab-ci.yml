@@ -1,3 +1,10 @@
+image:
+  name: hashicorp/terraform:0.12.21
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    # We need to override entrypoint in order to not auto execute terraform binary
+
 stages:
   - Test and Lint
   - Build and Push
@@ -50,7 +57,10 @@ Lint and Test Server:
 Validate Terraform:
   stage: Test and Lint
   script:
-    - echo "Validate Terraform"
+    - cd deploy/
+    - terraform init -backend=false
+    - terraform validate
+    - terraform fmt -check
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
