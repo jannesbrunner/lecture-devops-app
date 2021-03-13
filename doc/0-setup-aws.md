@@ -46,5 +46,42 @@ programmatic and console access.
 - - builds come from production and staging environment
 - - builds are tagged with git commit SHA and also latest (for latest build)
 
+## 7) Create Policy for CI IAM User
+- This Policy is for a user that gets programmatic access to AWS 
+- GitLab is using this IAM user with this policy to
+  - run Terraform (apply changes to environments)
+  - push app artifacts (builds) of our project to AWS ECR
+
+- For security reasons CI account is limited to only needed access rights
+  - A template aws security policy can be found here [app-terraform-ci-user.json](../doc/aws-policies/app-terraform-ci-user.json)
+    - Replace every `${PUT_IN_UNIQUE_S3_BUCKET_NAME}` with the S3 Bucket name created in Step 4).
+    - Replace every `${PUT_IN_ECR_REPO_NAME}` with the AWS ECR Repo Name created in tep 6).
+    - Replace every `${PUT_IN_DYNAMODB_NAME}` with the AWS DynamoDB table name created in Step 5).
+  - CI user can fully access AWS EC2 but:
+  - CI user cant create AWS EC2 resources greater than t2.micro 
+  - CI user can access ECR repository created in Step 6)
+  - CI user can read and update the Terraform lock state in AWS dynamodb created in Step 5
+
+- Head over to your AWS Console -> IAM -> Policies -> Create Policy
+- Choose JSON Tab and paste in content of [app-terraform-ci-user.json](../doc/aws-policies/app-terraform-ci-user.json) 
+  - with your replaced data! (see above).
+- Review your Policy and give it a name like "lecture-devOps-ci" and optional a description like "Policy for lecture-devops-app CI user".
+- Create the policy
+  
+## 8) Create CI IAM User in AWS
+
+**WARNING!**: It is not possible to create IAM users with access keys on an AWS Educate Account. <br/>
+**You can skip this step and unfortunately you have to use your AWS main account** <br/>
+Unfortunately you have to re-set your AWS Access Key in GitLab every time it got refreshed. <br/>
+This is tedious but no other solution possible on AWS Educate.
+
+- This creates a IAM User for GitLab CI that is using the policy created in Step 7)
+- Head over to your AWS Console -> IAM -> Users -> Create User
+- Name the user "lecture-devops-app-ci" and give it only programmatic access.
+- Next choose "Attach existing policies directly"
+- Set filter to "custom managed"
+- Select "lecture-devOps-ci" policy
+- Review your settings and create user
+  
 ### Continue with terraform setup
 [go to terraform setup documentation](./setup-terraform.md)
