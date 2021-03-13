@@ -41,9 +41,6 @@ Lint and Test Server:
     - npm install
     - npm run lint
     - npm run test
-  cache:
-    paths:
-    - ./app/server/node_modules
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
