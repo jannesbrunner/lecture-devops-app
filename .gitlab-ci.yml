@@ -17,21 +17,29 @@ Test and Lint Client:
   script:
     - cd ./app/client
     - npm install
-    - npm run test
     - npm run lint
+    - npm run test
   cache:
     paths:
     - ./app/client/node_modules
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
-Lint Server:
-  image: node:8.9.4
+Lint and Test Server:
+  image: node:10.9.0-alpine
   stage: Test and Lint
+  services:
+    - mongo:4.2.6
+  variables:
+    DB_PORT: 27017
+    DB_HOST: todo-app-db
+    MONGODB_URL: mongodb://todo-app-db:27017/todo-app
   script:
+    - mongoimport --host $DB_HOST
     - cd ./app/server
     - npm install
     - npm run lint
+    - npm run test
   cache:
     paths:
     - ./app/server/node_modules
