@@ -73,6 +73,8 @@ Build and Push:
   services:
   - docker:19.03.0-dind
   stage: Build and Push
+  before_script:
+    - docker info
   script:
     - apk add py3-pip
     - pip3 install awscli
