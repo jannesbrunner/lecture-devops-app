@@ -65,9 +65,9 @@ Validate Terraform:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 Build and Push:
-  image: docker:19.03.5
+  image: docker:latest
   services:
-    - docker:19.03.5-dind
+    - docker:dind
   stage: Build and Push
   script:
     - apk add python3
