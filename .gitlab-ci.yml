@@ -67,7 +67,8 @@ Validate Terraform:
 Build and Push:
   image: docker:latest
   services:
-    - docker:dind
+  - docker:19.03.0-dind
+    # See https://github.com/docker-library/docker/pull/166
   stage: Build and Push
   script:
     - apk add py3-pip
