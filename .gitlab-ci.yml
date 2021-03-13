@@ -1,3 +1,10 @@
+image:
+  name: hashicorp/terraform:0.12.21
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    # We need to override entrypoint in order to not auto execute terraform binary
+
 stages:
   - Test and Lint
   - Build and Push
@@ -11,17 +18,49 @@ stages:
 
 # Jobs:
 
-Test and Lint:
+Test and Lint Client:
+  image: node:8.9.4
   stage: Test and Lint
   script:
-    - echo "Test and Lint"
+    - cd ./app/client
+    - npm install
+    - npm run lint
+    - npm run test
+  cache:
+    paths:
+    - ./app/client/node_modules
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
+
+Lint and Test Server:
+  image: node
+  stage: Test and Lint
+  services:
+    - name: mongo:4.2.6
+      alias: todo-app-db
+
+  variables:
+    DB_PORT: 27017
+    DB_HOST: todo-app-db
+    MONGODB_URL: mongodb://todo-app-db:27017/todo-app
+  script:
+    - cd ./app/server
+    - npm install
+    - npm run lint
+    - npm run test
+  cache:
+    paths:
+    - ./app/server/node_modules
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 Validate Terraform:
   stage: Test and Lint
   script:
-    - echo "Validate Terraform"
+    - cd deploy/
+    - terraform init -backend=false
+    - terraform validate
+    - terraform fmt -check
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
@@ -31,7 +70,7 @@ Build and Push:
   - echo "Build and Push Docker Image"
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
-    # We only want to Build and Push artifacts that survived test and lint.
+    # We only want to Build and Push artifacts that survived test and lint stage.
     # Therefore we only Build and Push after a merge request gets merged in (commit) -> no build and push on merge request creation!
 
 Staging Plan:

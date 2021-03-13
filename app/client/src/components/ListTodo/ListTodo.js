@@ -95,6 +95,6 @@ class ListTodo extends Component {
             </MDBContainer>
         );
     }
-};
+}
 
 export default ListTodo;

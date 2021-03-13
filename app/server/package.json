@@ -8,10 +8,14 @@
     "start:dev": "env-cmd -f ./dev.env nodemon src/index.js",
     "start:container-dev": "env-cmd -f ./dev.container.env nodemon src/index.js",
     "test": "jest --ci",
-    "test:dev": "env-cmd -f ./dev.env jest"
+    "test:dev": "env-cmd -f ./dev.env jest",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
+  "eslintIgnore": ["*.test.js"],
   "devDependencies": {
     "env-cmd": "^10.1.0",
+    "eslint": "^7.22.0",
     "jest": "^26.4.2",
     "nodemon": "^2.0.4"
   },
@@ -22,7 +26,7 @@
     "express": "^4.17.1",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.7",
+    "mongoose": "^5.12.0",
     "validator": "^13.0.0"
   },
   "engines": {

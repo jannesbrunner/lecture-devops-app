@@ -24,9 +24,17 @@ aws-mac:
 dev-start:
 	docker-compose up
 
-.PHONY: dev-test
-dev-test:
-	docker-compose exec -e MONGODB_URL=mongodb://todo-app-db:27017/todo-app todo-app-server npm run test
+.PHONY: dev-test-server
+dev-test-server:
+	cd ./app/server \
+	&& docker build -t lda-server-test . \
+	&& docker run --rm -it lda-server-test npm run lint
+
+.PHONY: dev-test-client
+dev-test-client:
+	cd ./app/client \
+	&& docker build -t lda-client-test . \
+	&& docker run --rm -it lda-client-test npm run test && npm run lint
 
 .PHONY: dev-purge
 dev-purge:
