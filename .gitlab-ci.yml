@@ -65,7 +65,7 @@ Validate Terraform:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 Build and Push:
-  image: docker:latest
+  image: docker:19.03.0
   variables:
     # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
     DOCKER_DRIVER: overlay2
