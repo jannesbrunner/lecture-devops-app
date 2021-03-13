@@ -8,8 +8,11 @@
     "start:dev": "env-cmd -f ./dev.env nodemon src/index.js",
     "start:container-dev": "env-cmd -f ./dev.container.env nodemon src/index.js",
     "test": "jest --ci",
-    "test:dev": "env-cmd -f ./dev.env jest"
+    "test:dev": "env-cmd -f ./dev.env jest",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
+  "eslintIgnore": ["*.test.js"],
   "devDependencies": {
     "env-cmd": "^10.1.0",
     "eslint": "^7.22.0",
