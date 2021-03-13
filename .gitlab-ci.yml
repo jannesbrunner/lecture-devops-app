@@ -11,16 +11,29 @@ stages:
 
 # Jobs:
 
-Test and Lint:
+Test and Lint Client:
   image: node:8.9.4
   stage: Test and Lint
   script:
     - cd ./app/client
     - npm install
     - npm run test
+    - npm run lint
   cache:
     paths:
     - ./app/client/node_modules
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
+
+Lint Server:
+  image: node:8.9.4
+  stage: Test and Lint
+  script:
+    - cd ./app/server
+    - npm install
+    - npm run lint
+  cache:
+    paths:
     - ./app/server/node_modules
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
@@ -38,7 +51,7 @@ Build and Push:
   - echo "Build and Push Docker Image"
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
-    # We only want to Build and Push artifacts that survived test and lint.
+    # We only want to Build and Push artifacts that survived test and lint stage.
     # Therefore we only Build and Push after a merge request gets merged in (commit) -> no build and push on merge request creation!
 
 Staging Plan:
