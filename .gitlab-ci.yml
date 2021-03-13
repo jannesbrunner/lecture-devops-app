@@ -26,7 +26,7 @@ Test and Lint Client:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 Lint and Test Server:
-  image: node:10.9.0-alpine
+  image: node:14:16.0-buster
   stage: Test and Lint
   services:
     - name: mongo:4.2.6
