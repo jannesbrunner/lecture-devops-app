@@ -13,9 +13,6 @@ RUN npm install
 
 COPY ./app/client .
 
-# Test client site
-RUN npm run test
-
 # build app for production
 RUN npm run build
 
