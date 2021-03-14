@@ -67,9 +67,10 @@ Validate Terraform:
 Build and Push:
   image: docker:18.09.7
     # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
+    # https://gitlab.com/gitlab-org/charts/gitlab/-/issues/478
   stage: Build and Push
   services:
-   - docker:18.09-dind
+   - docker:18.09.7-dind
   before_script:
   - docker info
   tags:
@@ -77,10 +78,10 @@ Build and Push:
     # this jobs only runs on my own set up runner
   script:
     - apk add py3-pip
-    #- pip3 install awscli
+    - pip3 install awscli
     - docker build --compress -t $ECR_REPO:$CI_COMMIT_SHORT_SHA .
-    #- $(aws ecr get-login --no-include-email --region us-east-1)
-    #- docker push $ECR_REPO:$CI_COMMIT_SHORT_SHA
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+    - docker push $ECR_REPO:$CI_COMMIT_SHORT_SHA
     - docker tag $ECR_REPO:$CI_COMMIT_SHORT_SHA $ECR_REPO:latest
     - docker push $ECR_REPO:latest
 
