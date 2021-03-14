@@ -76,8 +76,6 @@ Build and Push:
     entrypoint: ["env", "-u", "DOCKER_HOST"]
     command: ["dockerd-entrypoint.sh"]
   stage: Build and Push
-  before_script:
-    - docker info
   script:
     - apk add py3-pip
     - pip3 install awscli
