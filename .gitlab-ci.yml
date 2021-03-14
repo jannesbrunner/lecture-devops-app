@@ -65,15 +65,11 @@ Validate Terraform:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 Build and Push:
-  image: docker:18.09.7
+  image: docker:18.09.7-dind
   variables:
     # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-  services:
-  - name: docker:18.09.7-dind
-    entrypoint: ["env", "-u", "DOCKER_HOST"]
-    command: ["dockerd-entrypoint.sh"]
   stage: Build and Push
   tags:
     - ownrunner
