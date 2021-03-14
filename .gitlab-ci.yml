@@ -73,9 +73,6 @@ Build and Push:
    - docker:18.09.7-dind
   before_script:
   - docker info
-  tags:
-    - ownrunner
-    # this jobs only runs on my own set up runner
   script:
     - apk add py3-pip
     - pip3 install awscli
