@@ -72,7 +72,9 @@ Build and Push:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   services:
-  - docker:18.09-dind
+  - name: docker:18-dind
+    entrypoint: ["env", "-u", "DOCKER_HOST"]
+    command: ["dockerd-entrypoint.sh"]
   stage: Build and Push
   before_script:
     - docker info
