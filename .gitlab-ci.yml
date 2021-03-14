@@ -69,13 +69,16 @@ Build and Push:
   variables:
     # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
     DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://localhost:2378
+    DOCKER_HOST: tcp://http://192.168.178.94:2378
     DOCKER_TLS_CERTDIR: ""
   services:
   - name: docker:18.09.7-dind
     entrypoint: ["env", "-u", "DOCKER_HOST"]
     command: ["dockerd-entrypoint.sh"]
   stage: Build and Push
+  tags:
+    - ownrunner
+    # this jobs only runs on my own set up runner
   script:
     - apk add py3-pip
     - pip3 install awscli
