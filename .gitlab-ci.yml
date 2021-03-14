@@ -81,11 +81,11 @@ Build and Push:
   script:
     - apk add py3-pip
     - pip3 install awscli
-    - docker build --compress -t $ECR_REPO:$CI_COMMIT_SHORT_SHA .
+    - sudo docker build --compress -t $ECR_REPO:$CI_COMMIT_SHORT_SHA .
     - $(aws ecr get-login --no-include-email --region us-east-1)
-    - docker push $ECR_REPO:$CI_COMMIT_SHORT_SHA
-    - docker tag $ECR_REPO:$CI_COMMIT_SHORT_SHA $ECR_REPO:latest
-    - docker push $ECR_REPO:latest
+    - sudo docker push $ECR_REPO:$CI_COMMIT_SHORT_SHA
+    - sudo docker tag $ECR_REPO:$CI_COMMIT_SHORT_SHA $ECR_REPO:latest
+    - sudo docker push $ECR_REPO:latest
 
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
