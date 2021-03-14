@@ -71,6 +71,8 @@ Build and Push:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   stage: Build and Push
+  before_script:
+  - docker info
   tags:
     - ownrunner
     # this jobs only runs on my own set up runner
