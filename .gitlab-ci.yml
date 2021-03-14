@@ -77,7 +77,7 @@ Build and Push:
     - ownrunner
     # this jobs only runs on my own set up runner
   script:
-    #- apk add py3-pip
+    - apk add py3-pip
     #- pip3 install awscli
     - docker build --compress -t $ECR_REPO:$CI_COMMIT_SHORT_SHA .
     #- $(aws ecr get-login --no-include-email --region us-east-1)
