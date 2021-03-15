@@ -15,3 +15,11 @@ variable "contact" {
   default     = "s40929@beuth-hochschule.de"
   description = "maintainer contact e-address"
 }
+
+variable "db_username" {
+  description = "Username for aws documentdb cluster instance"
+}
+
+variable "db_password" {
+  description = "Password for aws documentdb cluster instance"
+}
