@@ -175,7 +175,26 @@ _Triggered by_ : Commit -> __Production__ <br/>
 - Destroying entire staging or production environment in AWS manually with terraform via GitLab CI/CD pipeline.
 
 ## Architecture
-- TBA 
+
+
+### Network 
+
+*INSERT NETWORK PICTURE HERE* <br/>
+
+- Each environment (staging and production) is divided up into one public and one private reachable part 
+represented by subnets. 
+- The running app itself (server part that also serves the client to a visitors browser) is set up in the public subnet.
+- alongside with a public reachable (but ssh-key secured) bastion server for performing administration task within the environment.
+  - e.g. checking out metrics and logs etc. 
+- the database is located in the private part of each environment because there is no need for direct public access to the db.
+- an AWS Internet Gateway is controlling inbound and outbound access to the to-do-app and the bastion server.
+- (there is also an AWS NAT Gateway acting as emergency exit for outbound traffic only).
+- The traffic between Public and Private subnet is managed by a route table.
+  
+- The network is set up to make use of AWS availability zones in the running AWS region
+  - This is done by creating the subnets (public/private) in availability zone A and B.
+  - This means if availability zone A goes down, zone B can take over and prevent an outage.
+  - This also necessary for AWS load balancer to do its job. 
 
 ## Technology
 This sections briefly describes technology (software, etc.) 
