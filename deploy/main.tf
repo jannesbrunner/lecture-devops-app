@@ -24,3 +24,6 @@ locals {
     ManagedBy   = "Terraform"
   }
 }
+
+# to receive current aws region:
+data "aws_region" "current" {}
