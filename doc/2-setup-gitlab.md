@@ -39,5 +39,9 @@ With that being said: Every time you log-in again on AWS Educate you have to rep
   - ECR_REPO
     - ECR Repository URI (get it from https://console.aws.amazon.com/ecr/repositories)
     - e.g 742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server
+  - TF_VAR_db_user
+    - Username for accessing AWS DocumentDB
+  - TF_VAR_db_password
+    - Password for accessing AWS DocumentDB
 
   
