@@ -138,5 +138,84 @@ resource "aws_nat_gateway" "public_b" {
     local.common_tags,
     map("Name", "${local.prefix}-public-b")
   )
-
 }
+
+####################################################
+# Private Subnets - Outbund Internet Access only   #
+####################################################
+
+######### Private A ############
+
+resource "aws_subnet" "private_a" {
+  cidr_block = "10.1.10.0/24" # => 254 host per subnet
+  # Range 10.1.10.X (X = 0-254)
+  # 10.1.3.X to 10.1.9.X still available for public subnets if needed
+  vpc_id            = aws_vpc.main.id
+  availability_zone = "${data.aws_region.current.name}a"
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${local.prefix}-private-a")
+  )
+}
+
+resource "aws_route_table" "private_a" {
+  vpc_id = aws_vpc.main.id
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${local.prefix}-private-a")
+  )
+}
+
+resource "aws_route_table_association" "private_a" {
+  subnet_id      = aws_subnet.private_a.id
+  route_table_id = aws_route_table.private_a.id
+}
+
+resource "aws_route" "private_a_interent_out" {
+  route_table_id = aws_route_table.private_a.id
+  # Private A Subnet has no direct outbound internet access
+  # So its utilizing public A subnets NAT gateway for restricetd outbound internet access
+  nat_gateway_id         = aws_nat_gateway.public_a.id
+  destination_cidr_block = "0.0.0.0/0"
+}
+
+######### Private AB ############
+
+resource "aws_subnet" "private_b" {
+  cidr_block = "10.1.11.0/24" # => 254 host per subnet
+  # Range 10.1.11.X (X = 0-254)
+  # 10.1.3.X to 10.1.9.X still available for public subnets if needed
+  vpc_id            = aws_vpc.main.id
+  availability_zone = "${data.aws_region.current.name}b"
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${local.prefix}-private-b")
+  )
+}
+
+resource "aws_route_table" "private_b" {
+  vpc_id = aws_vpc.main.id
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${local.prefix}-private-b")
+  )
+}
+
+resource "aws_route_table_association" "private_b" {
+  subnet_id      = aws_subnet.private_b.id
+  route_table_id = aws_route_table.private_b.id
+}
+
+resource "aws_route" "private_b_interent_out" {
+  route_table_id = aws_route_table.private_b.id
+  # Private B Subnet has no direct outbound internet access
+  # So its utilizing public B subnets NAT gateway for restricetd outbound internet access
+  nat_gateway_id         = aws_nat_gateway.public_b.id
+  destination_cidr_block = "0.0.0.0/0"
+}
+
+
