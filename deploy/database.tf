@@ -29,6 +29,7 @@ resource "aws_security_group" "docdb" {
 
 resource "aws_docdb_cluster" "main" {
   cluster_identifier      = "${local.prefix}-docdb-cluster"
+  db_subnet_group_name    = aws_docdb_subnet_group.main.name
   availability_zones      = ["${data.aws_region.current.name}a", "${data.aws_region.current.name}b"]
   port                    = 27017
   master_username         = var.db_username
