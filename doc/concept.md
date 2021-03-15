@@ -176,10 +176,19 @@ _Triggered by_ : Commit -> __Production__ <br/>
 
 ## Architecture
 
+*INSERT Architecture PICTURE HERE* <br/>
+### Database 
+
+- The project needs a documented orientated ('noSQL') database like MongoDB.
+- On local development (Environment 0) a MongoDB version 4.2.6 is running in a Docker Container. 
+  - automatically provided by Docker-Compose (see [docker-compose.yml](../docker-compose.yml)).
+
+- In staging and production environment (managed by terraform) an AWS documented-db cluster gets allocated
+  - Per environment one doc-db-cluster having one doc-db-instance per availability zone (A,B)
+  - Hence, one cluster with 2 instances
+
 
 ### Network 
-
-*INSERT NETWORK PICTURE HERE* <br/>
 
 - Each environment (staging and production) is divided up into one public and one private reachable part 
 represented by subnets.
@@ -220,9 +229,9 @@ that is used within the project and the targeting environments.
 
 ### Container Orchestration
 - Docker
-- Docker Swarm
-- Amazon ECS (Elastic Container Service)
-- Amazon EC2 (for Bastion Server)
+- Docker Compose
+- Amazon ECS (for running app in container)
+
 
 ### CI
 
@@ -242,6 +251,7 @@ that is used within the project and the targeting environments.
 - Amazon ECS for Container Orchestration
 - Amazon VPC for managing environments
 - Amazon ELB for load-balancing inbound traffic across two availability zones (per Environment)
+- Amazon DocumentDB (for running MongoDB like Database)
 
 ### NGINX
 - As reverse Proxy between Internet inbound access and ELB
