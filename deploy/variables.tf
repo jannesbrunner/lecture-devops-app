@@ -23,3 +23,7 @@ variable "db_username" {
 variable "db_password" {
   description = "Password for aws documentdb cluster instance"
 }
+
+variable "bastion_key_name" {
+  default = "lda-app-devops-bastion"
+}
