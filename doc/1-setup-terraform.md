@@ -66,3 +66,18 @@ terraform {
 - You can update project meta data in [variables.tf](../deploy/variables.tf) if you want to.
 - these variables and tags data get attached to all created resources in AWS for easy management.
 
+## 5 Create a terraform.tfvars file 
+
+There a some environment variables that are containing sensitive information and might 
+be unique to the setup a developer is running. 
+
+- You will find a [sample.tfvars](../deploy/sample.tfvars) file in project deploy folder
+- This sample file contains all variables that need to get set before planing or apply changes via terraform
+- Create a file called `terraform.tfvars` in deploy folder with all variables from the sample file
+- Alter variables values to your needs
+- *info*: this `terraform.tfvars` file gets automatically excluded from versioning system (git) for security reasons by terraform
+- **Hint**: You will need to set this variables via environment variables in GitLab. This is part of the GitLab setup.
+  - GitLab will use these variables values in CI/CD pipeline jobs
+  - Setting values in `terraform.tfvars` is for running terraform from a developer machine or bastion server
+
+Continue with [**GitLab Setup**](2-setup-gitlab.md) 

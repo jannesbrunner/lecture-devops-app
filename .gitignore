@@ -167,3 +167,6 @@ override.tf.json
 app/db/data/*
 # Mongo Log
 app/db/log/*
+
+# terraform tfvars
+deploy/terraform.tfvars
