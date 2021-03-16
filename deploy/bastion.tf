@@ -11,10 +11,37 @@ data "aws_ami" "amazon_linux" {
   owners = ["amazon"]
 }
 
+# Create Bastion Server IAM Role within AWS
+resource "aws_iam_role" "bastion" {
+  name               = "${local.prefix}-bastion"
+  assume_role_policy = file("./templates/bastion/instance-profile-policy.json")
+
+  tags = local.common_tags
+}
+
+### Bastion Server Policy Attachments to Bastion Rule
+
+# Give Bastion Server access to AWS ECR read only via AWS policy attachment
+resource "aws_iam_role_policy_attachment" "bastion_attach_policy" {
+  role       = aws_iam_role.bastion.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+## more policy attachments might follow here...
+
+######################################################
+
+# Create instance profile in order to set it on the actual instance
+resource "aws_iam_instance_profile" "bastion" {
+  name = "${local.prefix}-bastion-instance-profile"
+  role = aws_iam_role.bastion.name
+}
+
 resource "aws_instance" "bastion" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t2.micro" # should be enough for bastion server
-  user_data     = file("./templates/bastion/user-data.sh")
+  ami                  = data.aws_ami.amazon_linux.id
+  instance_type        = "t2.micro" # should be enough for bastion server
+  user_data            = file("./templates/bastion/user-data.sh")
+  iam_instance_profile = aws_iam_instance_profile.bastion.name # created one block earlier
 
   tags = merge(
     local.common_tags,
