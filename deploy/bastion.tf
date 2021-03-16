@@ -74,14 +74,14 @@ resource "aws_security_group" "bastion" {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
-    cidr_blocks = ["0.0.0.0./0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress { # http outgoing
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
-    cidr_blocks = ["0.0.0.0./0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress { # Allow AWS documentDB access in private subnets
