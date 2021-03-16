@@ -46,10 +46,53 @@ resource "aws_instance" "bastion" {
   subnet_id            = aws_subnet.public_a.id
   # Bastion is not a critcial resource we just launch into AZ A
   # In case of emergency we could launch a second instance into AZ B
+  vpc_security_group_ids = [
+    aws_security_group.bastion.id
+  ]
+
 
   tags = merge(
     local.common_tags,
     map("Name", "${local.prefix}-bastion")
   )
 
+}
+
+resource "aws_security_group" "bastion" {
+  description = "Control Bastion inbound and outbound access"
+  name        = "${local.prefix}-bastion"
+  vpc_id      = aws_vpc.main.id
+
+  ingress { # allow public ssh access
+    protocol    = "tcp"
+    from_port   = 22
+    to_port     = 22
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress { # https outgoing
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0./0"]
+  }
+
+  egress { # http outgoing
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0./0"]
+  }
+
+  egress { # Allow AWS documentDB access in private subnets
+    protocol  = "tcp"
+    from_port = 27017
+    to_port   = 27017
+    cidr_blocks = [
+      aws_subnet.private_a.cidr_block,
+      aws_subnet.private_b.cidr_block,
+    ]
+  }
+
+  tags = local.common_tags
 }

@@ -20,6 +20,10 @@ resource "aws_security_group" "docdb" {
     protocol  = "tcp"
     from_port = 27017
     to_port   = 27017
+
+    security_groups = [ # limit access to this groups only
+      aws_security_group.bastion.id
+    ]
   }
 
   tags = local.common_tags
