@@ -3,7 +3,7 @@
         "name": "server",
         "image": "${app_image}",
         "essential": true,
-        "memoryReservation": 256,
+        "memoryReservation": 512,
         "environment": [
             {"name": "PORT", "value": "3000" },
             {"name": "MONGODB_URL", "value": "${db_host}"},
