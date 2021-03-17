@@ -31,7 +31,9 @@ const mongooseInstance_ = mongoose.connect(
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
-
+        ssl: dbUserPasswordRequired,
+        sslValidate: false,
+        sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
         useUnifiedTopology: true,
         heartbeatFrequencyMS: 1000 * 5,         // 1 sec * 5
         serverSelectionTimeoutMS: 1000 * 10     // 1 sec * 10
@@ -44,6 +46,7 @@ mongooseInstance_
     })
     .catch(( err )=>{
         console.error( `Cannot connect to database: mongodb://${ mongodbURL }` );
+        console.log(err, 'Error')
     });
 
 
