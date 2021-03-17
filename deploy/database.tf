@@ -33,8 +33,8 @@ resource "aws_security_group" "docdb" {
 # Defining main AWS docdb cluster
 
 resource "aws_docdb_cluster" "main" {
-  cluster_identifier      = "${local.prefix}-docdb-cluster"
-  db_subnet_group_name    = aws_docdb_subnet_group.main.name
+  cluster_identifier   = "${local.prefix}-docdb-cluster"
+  db_subnet_group_name = aws_docdb_subnet_group.main.name
   # availability_zones      = ["${data.aws_region.current.name}a", "${data.aws_region.current.name}b"]
   # cluster wants to live zone c as well so commenting this out prevents force recreation on every commit
   port                    = 27017
