@@ -34,7 +34,7 @@ const mongooseInstance_ = mongoose.connect(
         useFindAndModify: false,
         ssl: dbUserPasswordRequired,
         sslValidate: false,
-        sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
+        sslCA: fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem'),
         useUnifiedTopology: true,
         heartbeatFrequencyMS: 1000 * 5,         // 1 sec * 5
         serverSelectionTimeoutMS: 1000 * 10     // 1 sec * 10
