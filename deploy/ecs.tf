@@ -128,7 +128,7 @@ resource "aws_ecs_service" "server" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.todo_server
+    target_group_arn = aws_lb_target_group.todo_server.arn
     container_name   = "server"
     container_port   = 3000
   }
