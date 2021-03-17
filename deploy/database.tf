@@ -12,7 +12,7 @@ resource "aws_docdb_subnet_group" "main" {
 }
 
 resource "aws_security_group" "docdb" {
-  description = "Allo access to aws docdb cluster instance"
+  description = "Allow access to aws docdb cluster instance"
   name        = "${local.prefix}-docdb-inbound-access"
   vpc_id      = aws_vpc.main.id
 
