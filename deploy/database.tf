@@ -73,8 +73,8 @@ resource "aws_docdb_cluster_instance" "db_zone_b" {
   cluster_identifier = aws_docdb_cluster.main.id
   instance_class     = "db.t3.medium"
   tags = merge(
-  local.common_tags,
-  map("Name", "${local.prefix}-db-b")
+    local.common_tags,
+    map("Name", "${local.prefix}-db-b")
   )
 }
 
