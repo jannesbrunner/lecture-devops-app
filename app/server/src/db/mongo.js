@@ -19,6 +19,8 @@ if( process.env.NODE_ENV === 'production' ){
 
 const dbUserPasswordRequired = process.env.DB_USERNAME && process.env.DB_PASSWORD;
 
+const ca = fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
+
 const mongodbURL = dbUserPasswordRequired ?
 `${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}` :
 `${process.env.DB_URL}`
@@ -33,8 +35,8 @@ const mongooseInstance_ = mongoose.connect(
         useCreateIndex: true,
         useFindAndModify: false,
         ssl: dbUserPasswordRequired,
-        sslValidate: false,
-        sslCA: fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem'),
+        sslValidate: true,
+        sslCA: ca,
         useUnifiedTopology: true,
         heartbeatFrequencyMS: 1000 * 5,         // 1 sec * 5
         serverSelectionTimeoutMS: 1000 * 10     // 1 sec * 10
