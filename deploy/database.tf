@@ -67,15 +67,15 @@ resource "aws_docdb_cluster_instance" "db_zone_a" {
 
 # Cluster instance in availability zone B
 
-#resource "aws_docdb_cluster_instance" "db_zone_b" {
-#  identifier         = "${local.prefix}-docdb-instance-b"
-#  availability_zone  = "${data.aws_region.current.name}b"
-#  cluster_identifier = aws_docdb_cluster.main.id
-#  instance_class     = "db.t3.medium"
-#  tags = merge(
-#    local.common_tags,
-#    map("Name", "${local.prefix}-db-b")
-#  )
-#}
+resource "aws_docdb_cluster_instance" "db_zone_b" {
+  identifier         = "${local.prefix}-docdb-instance-b"
+  availability_zone  = "${data.aws_region.current.name}b"
+  cluster_identifier = aws_docdb_cluster.main.id
+  instance_class     = "db.t3.medium"
+  tags = merge(
+  local.common_tags,
+  map("Name", "${local.prefix}-db-b")
+  )
+}
 
 
