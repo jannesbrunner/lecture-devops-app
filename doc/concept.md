@@ -34,6 +34,11 @@ linux running machine of a small type (t2.micro).
 This one aims to establish a reliable local development environment on a developers machine. 
 
 - All infrastructure and resources gets allocated locally via Docker/Docker-compose.
+
+- There are 3 `.env` - files:
+  - app-container-dev.env => This gets forwarded into the running development container of the server (including client).
+  - app-db-container-dev.env => This gets forwarded into the running mongodb database container.
+  - .env => variables set here get used by docker-compose to create dev (server/db) with set configuration
 #### Pipeline
 
 **Trigger**: Manual CLI Command
