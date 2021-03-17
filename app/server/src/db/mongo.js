@@ -16,9 +16,16 @@ if( process.env.NODE_ENV === 'production' ){
     });
 }
 
+const dbUserPasswordRequired = process.env.DB_USER && process.env.DB_PASSWORD;
+
+const mongodbURL = dbUserPasswordRequired ?
+`${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}` :
+`${process.env.DB_URL}`
+
+console.log('db_url:' + mongodbURL)
 
 const mongooseInstance_ = mongoose.connect(
-    process.env.MONGODB_URL,
+    `mongodb://${mongodbURL}`,
     {
         useNewUrlParser: true,
         useCreateIndex: true,
@@ -32,10 +39,10 @@ const mongooseInstance_ = mongoose.connect(
 
 mongooseInstance_
     .then(()=>{
-        process.env.NODE_ENV !== 'test' && console.log( `Connect established to database: ${ process.env.MONGODB_URL }` );
+        process.env.NODE_ENV !== 'test' && console.log( `Connect established to database: mongodb://${ mongodbURL }` );
     })
     .catch(( err )=>{
-        console.error( `Cannot connect to database: ${ process.env.MONGODB_URL }` );
+        console.error( `Cannot connect to database: mongodb://${ mongodbURL }` );
     });
 
 
