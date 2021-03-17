@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "server" {
   requires_compatibilities = ["FARGATE"]                                           # serverless version of deploying containers by AWS
   network_mode             = "awsvpc"                                              # we want to use the conatiners within our VPC
   cpu                      = 256
-  memory                   = 256
+  memory                   = 512
   execution_role_arn       = aws_iam_role.task_execution_role.arn # runtime role
   task_role_arn            = aws_iam_role.app_iam_role.arn        # startup role
 
