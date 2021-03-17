@@ -1,9 +1,8 @@
 version: '3.9'
 
-
 volumes:
   todo_data:
-    name: ${DB_VOLUME_NAME}
+    name: ${DB_VOLUME_NAME} # collected from .env file
 
 services:
 
@@ -11,27 +10,28 @@ services:
     container_name: todo-app-db
     hostname: todo-app-db
     image: mongo:4.2.6
-    env_file: './db-dev.env'
+    env_file: './db-container-dev.env'
     volumes:
       - ./app/db/local.mongod.conf:/etc/mongod.conf
       - ./app/db/log:/var/log/mongodb/
       - todo_data:/data/db
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - ${DB_PORT}:${DB_PORT} # collected from .env file
     networks:
       - todo-app-dev
     command: ["-f", "/etc/mongod.conf"]
 
   todo-app-server:
     container_name: todo-app-server
-    env_file: './app-dev.env'
+    env_file: './app-container-dev.env'
     build:
       context: .
       dockerfile: dockerfile
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - ${PORT}:${PORT} # collected from .env file
     networks:
       - todo-app-dev
+    command: "npm run start:container-dev"
 
 
 

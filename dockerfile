@@ -36,4 +36,4 @@ COPY --from=todo-app-client-build /client/build /src/public
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "start:container-dev" ]
+CMD [ "npm", "run", "start" ]
