@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
 
 
 // utilize event emitter to indicate connection retries in logs
