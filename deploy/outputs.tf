@@ -1,3 +1,7 @@
+output "bastion_host" {
+  value = aws_instance.bastion.public_dns
+}
+
 ## Database Outputs
 
 output "db_host_cluster" {
@@ -12,10 +16,10 @@ output "db_port_zone_a" {
   value = aws_docdb_cluster_instance.db_zone_a.port
 }
 
-output "db_host_zone_b" {
-  value = aws_docdb_cluster_instance.db_zone_b.endpoint
-}
+#output "db_host_zone_b" {
+#  value = aws_docdb_cluster_instance.db_zone_b.endpoint
+#}
 
-output "db_port_zone_b" {
-  value = aws_docdb_cluster_instance.db_zone_b.port
-}
+#output "db_port_zone_b" {
+#  value = aws_docdb_cluster_instance.db_zone_b.port
+#}

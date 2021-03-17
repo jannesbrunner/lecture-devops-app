@@ -83,5 +83,15 @@ This is tedious but no other solution possible on AWS Educate.
 - Select "lecture-devOps-ci" policy
 - Review your settings and create user
   
+## 9) Add SSH key to AWS
+In order to access the bastion server (which is a linux running virtual machine)
+you need to add your public ssh-key to AWS. 
+
+- Create an SSH-Key (if not already done)
+- Output your **public** SSH-Key via `$ cat ~/.ssh/id_rsa.pub`
+- Go to AWS Console -> EC2 -> Network & Security -> Key Pairs [short link](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#KeyPairs:)
+- Click import key on the right hand top side
+- Name the key pair `lda-app-devops-bastion`
+- Input your **public** SSH-Key in the input field
 ### Continue with terraform setup
 [go to terraform setup documentation](./setup-terraform.md)

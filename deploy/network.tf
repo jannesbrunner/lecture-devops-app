@@ -173,7 +173,7 @@ resource "aws_route_table_association" "private_a" {
   route_table_id = aws_route_table.private_a.id
 }
 
-resource "aws_route" "private_a_interent_out" {
+resource "aws_route" "private_a_internet_out" {
   route_table_id = aws_route_table.private_a.id
   # Private A Subnet has no direct outbound internet access
   # So its utilizing public A subnets NAT gateway for restricetd outbound internet access
@@ -210,7 +210,7 @@ resource "aws_route_table_association" "private_b" {
   route_table_id = aws_route_table.private_b.id
 }
 
-resource "aws_route" "private_b_interent_out" {
+resource "aws_route" "private_b_internet_out" {
   route_table_id = aws_route_table.private_b.id
   # Private B Subnet has no direct outbound internet access
   # So its utilizing public B subnets NAT gateway for restricetd outbound internet access
