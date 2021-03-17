@@ -7,8 +7,8 @@
         "environment": [
             {"name": "PORT", "value": "3000" },
             {"name": "DB_URL", "value": "${db_url}"},
-            {"name": "DB_USER", "value": "${db_user}"},
-            {"name": "DB_PASS", "value": "${db_password}"},
+            {"name": "DB_USERNAME", "value": "${db_username}"},
+            {"name": "DB_PASSWORD", "value": "${db_password}"},
             {"name": "ALLOWED_HOSTS", "value": "${allowed_hosts}"}
         ],
         "logConfiguration": {

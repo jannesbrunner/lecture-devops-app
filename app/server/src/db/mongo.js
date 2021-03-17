@@ -16,13 +16,14 @@ if( process.env.NODE_ENV === 'production' ){
     });
 }
 
-const dbUserPasswordRequired = process.env.DB_USER && process.env.DB_PASSWORD;
+const dbUserPasswordRequired = process.env.DB_USERNAME && process.env.DB_PASSWORD;
 
 const mongodbURL = dbUserPasswordRequired ?
-`${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}` :
+`${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}` :
 `${process.env.DB_URL}`
 
 console.log('db_url:' + mongodbURL)
+console.log('db_username:' + process.env.DB_USERNAME)
 
 const mongooseInstance_ = mongoose.connect(
     `mongodb://${mongodbURL}`,

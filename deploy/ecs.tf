@@ -55,7 +55,7 @@ data "template_file" "app_container_definitions" {
   vars = {
     app_image        = var.ecr_image_server
     db_url           = var.db_url
-    db_user          = aws_docdb_cluster.main.master_username
+    db_username      = aws_docdb_cluster.main.master_username
     db_password      = aws_docdb_cluster.main.master_password
     log_group_name   = aws_cloudwatch_log_group.ecs_task_logs.name
     log_group_region = data.aws_region.current.name
