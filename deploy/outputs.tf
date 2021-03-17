@@ -23,3 +23,7 @@ output "db_host_zone_b" {
 output "db_port_zone_b" {
   value = aws_docdb_cluster_instance.db_zone_b.port
 }
+
+output "app_endpoint" {
+  value = aws_lb.todo_server.dns_name
+}
