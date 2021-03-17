@@ -40,7 +40,7 @@ resource "aws_docdb_cluster" "main" {
   port                    = 27017
   master_username         = var.db_username
   master_password         = var.db_password
-  backup_retention_period = 0
+  backup_retention_period = 1
   skip_final_snapshot     = true
 
   vpc_security_group_ids = [aws_security_group.docdb.id]
