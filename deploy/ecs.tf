@@ -1,3 +1,7 @@
+# AWS Elastic Container Server (ECS) is used to serve the app via running containers
+# We use ECS with AWS Fargate (https://aws.amazon.com/de/fargate/) a serverless container computing engine
+
+# define a ECS cluster
 resource "aws_ecs_cluster" "main" {
   name = "${local.prefix}-cluster"
 
@@ -34,4 +38,42 @@ resource "aws_iam_role" "app_iam_role" {
   assume_role_policy = file("./templates/ecs/assume-role-policy.json")
 
   tags = local.common_tags
+}
+
+# Create a AWS Cloudwatch log group for ECS task that is running the server containers
+resource "aws_cloudwatch_log_group" "ecs_task_logs" {
+  name = "${local.prefix}-server-containers"
+
+  tags = local.common_tags
+}
+
+# Template file for defining app containers that ECS will run
+# vars get rendered later within the template file
+data "template_file" "app_container_definitions" {
+  template = file("./templates/ecs/container-definitions.json.tpl")
+
+  vars = {
+    app_image        = var.ecr_image_server
+    db_host          = var.mongodb_url
+    db_user          = aws_docdb_cluster.main.master_username
+    db_password      = aws_docdb_cluster.main.master_password
+    log_group_name   = aws_cloudwatch_log_group.ecs_task_logs.name
+    log_group_region = data.aws_region.current.name
+    allowed_hosts    = "*"
+  }
+}
+
+# Creating ECS Task
+resource "aws_ecs_task_definition" "server" {
+  family                   = "${local.prefix}-server"
+  container_definitions    = data.template_file.app_container_definitions.rendered # rendered means with populated vars in template
+  requires_compatibilities = ["FARGATE"]                                           # serverless version of deploying containers by AWS
+  network_mode             = "awsvpc"                                              # we want to use the conatiners within our VPC
+  cpu                      = 256
+  memory                   = 256
+  execution_role_arn       = aws_iam_role.task_execution_role.arn # runtime role
+  task_role_arn            = aws_iam_role.app_iam_role.arn        # startup role
+
+  tags = local.common_tags
+
 }
