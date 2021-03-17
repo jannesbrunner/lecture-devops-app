@@ -30,11 +30,31 @@ resource "aws_security_group" "docdb" {
   tags = local.common_tags
 }
 
+# Defining a parameter group for cluster
+
+resource "aws_docdb_cluster_parameter_group" "main" {
+  family      = "docdb3.6"
+  name        = "${local.prefix}-docdb-parameter-group"
+  description = "docdb cluster parameter group for cluster"
+
+  parameter {
+    name         = "tls"
+    value        = "enabled"
+    apply_method = "immediate"
+  }
+
+  tags = merge(
+    local.common_tags,
+    map("Name", "${local.prefix}-main")
+  )
+}
+
 # Defining main AWS docdb cluster
 
 resource "aws_docdb_cluster" "main" {
-  cluster_identifier   = "${local.prefix}-docdb-cluster"
-  db_subnet_group_name = aws_docdb_subnet_group.main.name
+  cluster_identifier              = "${local.prefix}-docdb-cluster"
+  db_subnet_group_name            = aws_docdb_subnet_group.main.name
+  db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.main.name
   # availability_zones      = ["${data.aws_region.current.name}a", "${data.aws_region.current.name}b"]
   # cluster wants to live zone c as well so commenting this out prevents force recreation on every commit
   port                    = 27017
