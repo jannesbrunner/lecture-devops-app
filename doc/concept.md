@@ -182,6 +182,15 @@ _Triggered by_ : Commit -> __Production__ <br/>
 ## Architecture
 
 *INSERT Architecture PICTURE HERE* <br/>
+
+### Load Balancer 
+
+- A load balancer is handling incoming requests on staging and production environment (not on local dev environment)
+- The load balancer is listening on http port and forwards the traffic to the ECS services that is running the app via containers
+- Health checks getting performed on the entry path of the app-server `"/"`.
+  - If the status is unhealthy (detected by non satisfying http status code response)
+    - Load balancer informs ECS services about the outage (ECS will try to reload the service)
+    - Fallback to another availability zone (1 or 2 in us-east-1)
 ### Database 
 
 - The project needs a documented orientated ('noSQL') database like MongoDB.
