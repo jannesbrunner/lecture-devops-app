@@ -95,3 +95,15 @@ you need to add your public ssh-key to AWS.
 - Input your **public** SSH-Key in the input field
 ### Continue with terraform setup
 [go to terraform setup documentation](./setup-terraform.md)
+
+## 10) Add ECR Image URL to terraform config
+Terraform needs to know the exact URL to your AWS ECR that is holding
+the built server image (including the client part). 
+
+- Open up AWS console and go to ECR -> Amazon ECR -> repositories
+- Copy the URI of "lecture-devops-app-server"
+- Paste the value in [variables.tf](../deploy/variables.tf) like this 
+  - variable "ecr_image_server"
+  - default=${YOUR_ECR_URI}:latest
+- *Hint*: This gets overwritten during CI/CD jobs because there we use the specific build that is tagged by the git short SHA.
+  - But for deploying from a developers machine oder from bastion server we have default value pointing to the latest tag.
