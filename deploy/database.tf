@@ -35,7 +35,8 @@ resource "aws_security_group" "docdb" {
 resource "aws_docdb_cluster" "main" {
   cluster_identifier      = "${local.prefix}-docdb-cluster"
   db_subnet_group_name    = aws_docdb_subnet_group.main.name
-  availability_zones      = ["${data.aws_region.current.name}a", "${data.aws_region.current.name}b"]
+  # availability_zones      = ["${data.aws_region.current.name}a", "${data.aws_region.current.name}b"]
+  # cluster wants to live zone c as well so commenting this out prevents force recreation on every commit
   port                    = 27017
   master_username         = var.db_username
   master_password         = var.db_password
