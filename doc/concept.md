@@ -34,6 +34,11 @@ linux running machine of a small type (t2.micro).
 This one aims to establish a reliable local development environment on a developers machine. 
 
 - All infrastructure and resources gets allocated locally via Docker/Docker-compose.
+
+- There are 3 `.env` - files:
+  - app-container-dev.env => This gets forwarded into the running development container of the server (including client).
+  - app-db-container-dev.env => This gets forwarded into the running mongodb database container.
+  - .env => variables set here get used by docker-compose to create dev (server/db) with set configuration
 #### Pipeline
 
 **Trigger**: Manual CLI Command
@@ -187,6 +192,32 @@ _Triggered by_ : Commit -> __Production__ <br/>
   - Per environment one doc-db-cluster having one doc-db-instance per availability zone (A,B)
   - Hence, one cluster with 2 instances
 
+### Container Engine
+
+- The project is fully containerized
+  - In other words: the server runs in a single container
+  - The client side gets build and pushed to the server container as artifact
+  - At runtime the client gets dispatched to the visiting users web-browser as static files
+  - client does requests to the server then
+
+- On a local dev setup:
+  - With docker compose build:
+    - Build Client artifact
+    - Transfer Client artifact to server build
+    - Build server including client artifact
+  - With docker compose up
+    - Run server container (serve client on request)
+    - Run MongoDB container as local dev backend
+
+  - You can run tests on client and server automatically with docker compose
+    - All will run within containers
+
+- On Cloud Setup (Environments staging and production)
+  - We use AWS ECS with AWS Fargate to:
+    - Spin up built containers pulled from AWS ECR
+    - ECR contains a build from every commit (normally made by a merge request) 
+      - that was made into master (representing staging environment) and production branch
+    - The running app container(s) within an ECS Task are using the AWS documented-db cluster described before as db backend.
 
 ### Network 
 

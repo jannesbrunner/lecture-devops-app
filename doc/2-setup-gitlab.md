@@ -41,7 +41,14 @@ With that being said: Every time you log-in again on AWS Educate you have to rep
     - e.g 742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server
   - TF_VAR_db_user
     - Username for accessing AWS DocumentDB
+    - **Hint**: Mask and protect the var!
   - TF_VAR_db_password
     - Password for accessing AWS DocumentDB
+    - **Hint**: Mask and protect the var!
+  
+  Set this variable after first deployment and update the cloud again with Terraform
+  - TV_VAR_mongodb_url
+    - Connection string for connecting to AWS DocumentDB Cluster
+    - Get it from AWS Console -> DocumentDB -> Clusters -> lda-staging-docdb-cluster -> Connectivity & security
 
   

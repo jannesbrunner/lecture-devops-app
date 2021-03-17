@@ -22,7 +22,8 @@ resource "aws_security_group" "docdb" {
     to_port   = 27017
 
     security_groups = [ # limit access to this groups only
-      aws_security_group.bastion.id
+      aws_security_group.bastion.id,
+      aws_security_group.ecs_service.id,
     ]
   }
 
