@@ -72,12 +72,14 @@ There a some environment variables that are containing sensitive information and
 be unique to the setup a developer is running. 
 
 - You will find a [sample.tfvars](../deploy/sample.tfvars) file in project deploy folder
-- This sample file contains all variables that need to get set before planing or apply changes via terraform
+- This sample file contains all variables that need to get set before planing or apply changes via terraform from local or bastion server.
 - Create a file called `terraform.tfvars` in deploy folder with all variables from the sample file
 - Alter variables values to your needs
 - *info*: this `terraform.tfvars` file gets automatically excluded from versioning system (git) for security reasons by terraform
 - **Hint**: You will need to set this variables via environment variables in GitLab. This is part of the GitLab setup.
   - GitLab will use these variables values in CI/CD pipeline jobs
   - Setting values in `terraform.tfvars` is for running terraform from a developer machine or bastion server
+  - **IMPORTANT FOR DB_URL:** Put in all after `mongodb://ldadbuser:<insertYourPassword>@` regarding the db_url Terraform variable
+    - You can get this value after documentDB creation in AWS Console.  
 
 Continue with [**GitLab Setup**](2-setup-gitlab.md) 

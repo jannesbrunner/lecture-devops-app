@@ -24,6 +24,10 @@ variable "db_password" {
   description = "Password for aws documentdb cluster instance"
 }
 
+variable "db_url" {
+  description = "Connection string of the AWS documentDB cluster"
+}
+
 variable "bastion_key_name" {
   default = "lda-app-devops-bastion"
 }
@@ -33,6 +37,3 @@ variable "ecr_image_server" {
   default     = "742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server"
 }
 
-variable "mongodb_url" {
-  description = "Connection string of the AWS documentDB cluster"
-}

@@ -47,8 +47,11 @@ With that being said: Every time you log-in again on AWS Educate you have to rep
     - **Hint**: Mask and protect the var!
   
   Set this variable after first deployment and update the cloud again with Terraform
-  - TV_VAR_mongodb_url
+  - TV_VAR_db_url
     - Connection string for connecting to AWS DocumentDB Cluster
     - Get it from AWS Console -> DocumentDB -> Clusters -> lda-staging-docdb-cluster -> Connectivity & security
+    - **IMPORTANT:** Put in all after `mongodb://ldadbuser:<insertYourPassword>@` Part. 
+      - This contains DB User and DB Password and got set in `TF_VAR_db_user` and `TF_VAR_db_password`
+      - For security reasons this values get masked in GitLab. You only need to put the part after `@` in this variable.
 
   

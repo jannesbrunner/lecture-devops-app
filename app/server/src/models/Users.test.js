@@ -8,7 +8,7 @@ describe( 'Model: Users', ()=>{
         try{
             await dbClientInstance_;
         }catch( err ){
-            console.error( new Error( `Cannot connect to database: ${ process.env.MONGODB_URL }` ) );
+            console.error( new Error( `Cannot connect to database: ${ process.env.DB_URL }` ) );
             process.exit( 1 );
         }
     });

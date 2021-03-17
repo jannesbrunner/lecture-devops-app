@@ -29,7 +29,10 @@ dev-test-server:
 	cd ./app/server \
 	&& docker build -t lda-server-test . \
 	&& docker run --rm -it lda-server-test npm run lint \
-	&& docker-compose run --rm todo-app-server -e MONGODB_URL=mongodb://todo-app-db:27017/todo-app todo-app-server npm run test
+	&& cd ../.. \
+	&& docker-compose up -d \
+	&& docker-compose exec todo-app-server npm run test \
+	&& docker-compose down
 
 .PHONY: dev-test-client
 dev-test-client:
