@@ -36,7 +36,7 @@ Optional:
 
 
 ### Concept
-To get a better understament of the devOps setup and flow of this project, please take a look at the
+To get a better understatement of the devOps setup and flow of this project, please take a look at the
 [concept here](./doc/concept.md).
 
 ### Setup
@@ -52,22 +52,23 @@ You can use make to use the following commands. If you haven't make installed,
 please take a look at the [makefile](Makefile) and copy paste needed commands. </br>
 
 The following commands are available from the root directory (if make is installed):
-#### `make install`
 
-* installs all dependencies via `npm` for *server* and *client*
 
+
+#### TBA
+
+### Building 
 
 #### `make build`
 
 * builds the client code
 * copies it over into the server
 
+### Spin up locally 
 
-#### `make test`
+### Testing
 
-*NOTE: requires a MongoDB service to already run (see `MONGODB_URL` in target on where it's assumed to be running)*
-
-* runs client & server tests in [CI mode](https://jestjs.io/docs/en/cli.html#--ci) (exits regardless of the test outcome; closed tty)
+### Make changes
 
 
-#### TBA
+### Provisioning

@@ -1,7 +1,77 @@
 # DevOps Concept
-
+- [DevOps Concept](#devops-concept)
+  - [Overall Idea](#overall-idea)
+  - [Environments](#environments)
+    - [Local 0](#local-0)
+      - [Description](#description)
+      - [Pipeline](#pipeline)
+    - [Staging 1](#staging-1)
+      - [Description](#description-1)
+      - [Pipeline](#pipeline-1)
+    - [Production 2](#production-2)
+      - [Pipeline](#pipeline-2)
+  - [Lifecyle (Automation Steps)](#lifecyle-automation-steps)
+    - [Pipeline Stages:](#pipeline-stages)
+      - [1: Test and Lint](#1-test-and-lint)
+      - [2: Build and Push](#2-build-and-push)
+      - [3: Staging Plan / Production Plan](#3-staging-plan--production-plan)
+      - [4: Staging Apply / Production Apply](#4-staging-apply--production-apply)
+      - [5: Destroy (Manual)](#5-destroy-manual)
+  - [Architecture](#architecture)
+    - [Load Balancer](#load-balancer)
+    - [Database](#database)
+    - [Container Engine](#container-engine)
+    - [Network](#network)
+    - [Provisioning](#provisioning)
+  - [Technology](#technology)
+    - [Version Control System](#version-control-system)
+    - [App insights (metrics etc)](#app-insights-metrics-etc)
+    - [Command automation](#command-automation)
+    - [Container Orchestration](#container-orchestration)
+    - [CI/CD](#cicd)
+    - [Cloud](#cloud)
+    - [NGINX](#nginx)
+    - [Security](#security)
+    - [Needed installed tools](#needed-installed-tools)
+    - [Automated Tool installation](#automated-tool-installation)
+  
 **DevOps - Software Development and Operations (WiSe2021) @Beuth Hochschule**
 
+Welcome to the concept of this devOps concept. <br/>
+
+This concept describes the infrastructure, allocation of resources, version control system in use and more.
+For more information regarding the app to automate, please take a look into its [README](../app/README.md).
+
+
+## Overall Idea
+
+The overall idea is to automate as much as possible regarding 
+- local development including
+  - spin up the application locally
+  - building, testing, provisioning
+- allocate resources in an cloud environment to
+  - serving the app in public internet
+    - in two separated and isolated environments for production and testing new features (staging)
+
+The main focus is on following the infrastructure-as-code (IaC) paradigm. This is done by using 
+[HashiCorp Terraform](https://www.terraform.io/) strictly to manage cloud services. 
+Terraform is used on a developers machine, on bastion servers in the cloud and in CI/CD pipelines.
+[Git](https://git.com/) and [GitLab](https://gitlab.com) is in place as Version Control System (VCS).
+[GitLabCI](https://docs.gitlab.com/ee/ci/) is the chosen tool for
+- Continuous Integration (CI)
+- Continuous Delivery (CD)
+- Continuous Deployment (CD)
+
+For building, archiving and serving the application (means server with client + database), 
+the whole application gets containerized in OCI-Containers build, tagged and pushed to repositories 
+(that is holding different versions coupled with git commit short-SHA) by [Docker](https://docker.io)
+The choice for containers over virtual machines or running the code directly is emphasized with
+- Containers are lightweight
+- Less depending on the running infrastructure
+- Easier to manage
+
+For provisioning the project is utilizing AWS Cloudwatch through a bastion server
+- Alongside with prometheus (WIP)
 
 
 ## Environments
@@ -46,21 +116,21 @@ This one aims to establish a reliable local development environment on a develop
 1. Run Linting 
 If successful: 
 2. Build
-3. Run Tests (if any)
+3. Run Tests
 4. Allocate infrastructure locally via containers
 
-App is reachable via dev server running on localhost
+App is reachable via dev server running on localhost:3000
 
 - Supervision insights is reduced or not available. 
 
 ### Staging 1 
 #### Description
-- This environment is allocated in an AWS cloud environment. 
+- This environment is allocated and set up in an AWS cloud environment (VPC). 
 - New features and (hot) fixes can get tested here. 
 
 **Trigger**: Merge or Commit into Branch "Master" 
 - Master branch is protected on GitLab
-- - Only Maintainer can commit directly
+  - Only Maintainer can commit directly
 
 
 #### Pipeline
@@ -73,10 +143,12 @@ App is reachable via dev server running on localhost
 4. Push Artifact to Amazon ECR with tag ```$ECR_REPO:$CI_COMMIT_SHORT_SHA```
 5. Plan Staging (Terraform) <br />
 If successful:
-5. Apply Staging (Terraform)
+6. Apply Staging (Terraform)
 
 
-- App accessible via FQDN (Terraform output)
+- App running in staging environment accessible via FQDN (Terraform output)
+- Bastion Server running in staging environment accessible via FQDN (Terraform output)
+  - See result of terraform Apply job for getting these information
 
 ### Production 2
 
@@ -99,10 +171,12 @@ If successful:
 4. Push Artifact to Amazon ECR with tag ```$ECR_REPO:$CI_COMMIT_SHORT_SHA```
 5. Plan Production (Terraform) <br />
 If successful:
-5. Apply Production (Terraform)
+6. Apply Production (Terraform)
 
 
-- App accessible via FQDN (Terraform output)
+- App running in production environment accessible via FQDN (Terraform output)
+- Bastion Server running in production environment accessible via FQDN (Terraform output)
+  - See result of terraform Apply job for getting these information
 
 ## Lifecyle (Automation Steps)
 
@@ -186,7 +260,7 @@ _Triggered by_ : Commit -> __Production__ <br/>
 ### Load Balancer 
 
 - A load balancer is handling incoming requests on staging and production environment (not on local dev environment)
-- The load balancer is listening on http port and forwards the traffic to the ECS services that is running the app via containers
+- The load balancer is listening on http port and forwards the traffic to the ECS services which is running app & db via containers.
 - Health checks getting performed on the entry path of the app-server `"/"`.
   - If the status is unhealthy (detected by non satisfying http status code response)
     - Load balancer informs ECS services about the outage (ECS will try to reload the service)
@@ -216,7 +290,7 @@ _Triggered by_ : Commit -> __Production__ <br/>
   - In other words: the server runs in a single container
   - The client side gets build and pushed to the server container as artifact
   - At runtime the client gets dispatched to the visiting users web-browser as static files
-  - client does requests to the server then
+  - client does requests to the server
 
 - On a local dev setup:
   - With docker compose build:
@@ -225,17 +299,20 @@ _Triggered by_ : Commit -> __Production__ <br/>
     - Build server including client artifact
   - With docker compose up
     - Run server container (serve client on request)
-    - Run MongoDB container as local dev backend
+    - Run MongoDB container as local dev database
 
-  - You can run tests on client and server automatically with docker compose
+  - Run tests on client and server automatically with docker compose
     - All will run within containers
 
 - On Cloud Setup (Environments staging and production)
-  - We use AWS ECS with AWS Fargate to:
+  - AWS ECS with AWS Fargate in use to:
     - Spin up built containers pulled from AWS ECR
     - ECR contains a build from every commit (normally made by a merge request) 
       - that was made into master (representing staging environment) and production branch
-    - The running app container(s) within an ECS Task are using the AWS documented-db cluster described before as db backend.
+    - ~~The running app container(s) within an ECS Task are using the AWS documented-db cluster described before as db backend~~
+    - App DB is running as container in ECS Fargate
+    - Set desired replicas of services in [ecs.tf => aws_ecs_service" "server"](../deploy/ecs.tf)
+  - Update Strategy: In-Place with zero downtime
 
 ### Network 
 
@@ -247,18 +324,30 @@ represented by subnets.
   - Private Subnet B (running in availability zone B):  10.1.11.0/24
 - Terraform will create a whole VPC on AWS with described network for each environment
     
-- The running app itself (server part that also serves the client to a visitors browser) is set up in the public subnet of each environment.
-- Alongside with a public reachable (but ssh-key secured) bastion server for performing administration task within the environment.
+- The running app itself (server part that also serves the client to a visitors browser) is set up in the private subnet of each environment.
+- On the public subnet there is a public reachable (but ssh-key secured) bastion server for performing administration task within the environment.
   - e.g. checking out metrics and logs etc. 
+- A public accessible load balancer is on the public subnet as well. 
+  - Load balancer is listening on ports 80 (http) and 443 (https)
+  - A visitors request gets forwarded to the app running in private subnet
+  - Only load balancer can access the app server container from public Internet (besides bastion server)
 - the database is located in the private part of each environment because there is no need for direct public access to the db.
 - an AWS Internet Gateway is controlling inbound and outbound access to the app and the bastion server.
 - (there is also an AWS NAT Gateway acting as emergency exit for outbound traffic only for the private subnets).
+  - So containers can perform updates on port 443 for example
 - The traffic between Public and Private subnets is managed by a route table.
   
 - The network is set up to make use of AWS availability zones in the running AWS region
   - This is done by creating the subnets (public/private) twice, hence in availability zone A and B of the AWS region.
   - This means if availability zone A goes down, zone B can take over and prevent an outage.
-  - This also necessary for AWS load balancer to do its job. 
+  - This also necessary for AWS load balancer in order do its job. 
+
+### Provisioning
+
+- AWS CloudWatch (merging multiple log streams)
+- Prometheus 
+
+All via bastion server (one each per environment [staging/production])
 
 ## Technology
 This sections briefly describes technology (software, etc.) 
@@ -267,6 +356,10 @@ that is used within the project and the targeting environments.
 
 - Git
 - Following the Git Flow Pattern.
+  - Create Branches for
+    - feature/new-feature
+    - hotfix/new-hotfix
+  - Merge Request Creation into master || production branch triggers CI/CD Pipeline
 
 ### App insights (metrics etc)
 - https://prometheus.io/ for metrics (insights)
@@ -274,56 +367,60 @@ that is used within the project and the targeting environments.
 
 ### Command automation 
 - Make (makefile)
-- System (ps1 script or sh script)
+  - see the [Makefile](../Makefile) for common project commands and tasks
+- System (ps1 script and sh script)
+  - see [deploy/tools](../deploy/tools)
+    - Script for conveniently set AWS Access data (useful for Educate Account)
 
 ### Container Orchestration
 - Docker
 - Docker Compose
-- Amazon ECS (for running app in container)
+- Amazon ECS (for running app containers)
+  - AWS Fargate (serverless) Engine Runtime
+  - Configuration see [ecs.tf](../deploy/ecs.tf)
 
 
-### CI
+### CI/CD
 
-- GitLab CI
-
-### CD
-
-- GitLab CD
+- GitLab CI/CD
+- Configuration can be found in [.gitlab-ci.yml](../.gitlab-ci.yml)
+- Using docker-in-docker (dind) for
+  - build
+  - push
+  - Server and Database Container to AWS ECR
+- Run testing and lint + terraform jobs
 
 ### Cloud
-
-- Amazon Web Services AWS
+- Amazon Web Services (AWS)
 - Terraform to manage resources in the cloud
-- - Amazon S3 Bucket to version terraform state
-- - Amazon DynamoDB Table to lock terraform state
+  - Amazon S3 Bucket to version terraform state
+  - Amazon DynamoDB Table to lock terraform state
 - Amazon EC2 for Bastion Server (each per Cloud Environment)
 - Amazon ECS for Container Orchestration
+- Amazon ECR for Container Registration and Archiving
 - Amazon VPC for managing environments
-- Amazon ELB for load-balancing inbound traffic across two availability zones (per Environment)
-- Amazon DocumentDB (for running MongoDB like Database)
+- Amazon ELB for load-balancing inbound traffic across two availability zones (per Environment) and all running ECS Task Replicas
+- Amazon CloudWatch for provisioning log streams and more
+- ~~Amazon DocumentDB (for running MongoDB like Database)~~
 
 ### NGINX
-- As reverse Proxy between Internet inbound access and ELB
+- **WIP**: As reverse Proxy between Internet inbound access between Load balancer and actual service (ECS)
   
 ### Security
 
-- AWS-Vault to keep credentials encrypted with forced MFA policy on AWS
-- AWS-Vault generated temporarily access tokens get passed via environments variables if needed
+- AWS-Vault to keep credentials encrypted with forced MFA policy on AWS (not compatible with AWS Educate account)
+  - AWS-Vault generated temporarily access tokens get passed via environments variables if needed
+- AWS Cloud is set up in a way that ensures that
+  - Network access to a resource is limited to the fewest necessary
+  - IAM User for CI task is restricted with policy to only access and performing really needed actions
+  - Non-root IAM User for doing day-to-day administration tasks (not possible with Educate Account)  
 
 
-### Automated tool installation
-The idea here is to provide a script 
-on a (new) developers machine that automatically 
-installs all needed tools to manage the project.
+### Needed installed tools 
 
 To keep the needed installed tools on a developers machine at a minimum,
 most of the tools get executed by disposable one-time containers. 
-
--  MS Windows: Powershell Script (ps1)
-- Apple Mac: shell script (sh)
-- - Brew
-- - Brew Cask
-
+<br/>
 A DevOp/Maintainer/Developer only needs
 
 - Git
@@ -332,3 +429,18 @@ A DevOp/Maintainer/Developer only needs
 - (Make)
   
 locally installed on the machine.
+
+### Automated Tool installation 
+- The idea here is to provide scripts to 
+  - automatically installing  all needed tools on a (new) developers machine to
+  - to manage the project.
+Solution with:
+- MS Windows: Powershell Script (ps1)
+  - Chocolatey
+- Apple Mac || Linux: shell script (sh)
+  - Brew
+  - Brew Cask
+  - apt / yum / ...
+
+
+
