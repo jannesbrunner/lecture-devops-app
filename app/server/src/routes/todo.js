@@ -26,6 +26,7 @@ routes.post('/todo/add', auth, async (req, res) => {
         res.send({ todo });
     }
     catch (e) {
+        console.log(e)
         res.status(400).send(e);
     }
 });
@@ -40,6 +41,7 @@ routes.post('/todo/list', auth, async (req, res) => {
         res.send(todos);
     }
     catch (e) {
+        console.log(e)
         res.status(500).send;
     }
 });
@@ -79,6 +81,7 @@ routes.patch('/todo/update', auth, async (req, res) => {
         res.send(todo);
 
     } catch (e) {
+        console.log(e)
         res.status(400).send(e);
     }
 });
@@ -91,6 +94,7 @@ routes.delete('/todo/delete', auth, async (req, res) => {
         res.send(todo);
 
     } catch (e) {
+        console.log(e)
         res.status(500).send();
     }
 });

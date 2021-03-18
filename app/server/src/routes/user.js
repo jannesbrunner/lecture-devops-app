@@ -39,6 +39,7 @@ routes.post('/init', auth, async (req, res) => {
             res.cookie('todo-jt', req.token, cookieOptions).send({ user, token });
         }
     } catch (e) {
+        console.log(e)
         res.status(400).send();
     }
 });
@@ -57,6 +58,7 @@ routes.post('/login', async (req, res) => {
         res.cookie('todo-jt', token, cookieOptions).send({ user, token });
 
     } catch (e) {
+        console.log(e)
         res.status(400).send();
     }
 });
@@ -73,6 +75,7 @@ routes.post('/logout', auth, async (req, res) => {
 
         res.send();
     } catch (e) {
+        console.log(e)
         res.status(400).send();
     }
 });
