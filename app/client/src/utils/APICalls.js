@@ -24,13 +24,13 @@ export const signout = () => {
 }
 /* eslint-enable */
 export const init = () => {
-  return axiosInstance.post('/init').then(user => {
+  return axiosInstance.post(process.env.PUBLIC_URL + '/init').then(user => {
     return user.data
   })
 }
 
 export const login = (email, password) => {
-  return axiosInstance.post('/login', {
+  return axiosInstance.post(process.env.PUBLIC_URL + '/login', {
     email,
     password
   }).then(user => {
@@ -40,7 +40,7 @@ export const login = (email, password) => {
 }
 
 export const signup = (name, email, password) => {
-  return axiosInstance.post('/signup', {
+  return axiosInstance.post(process.env.PUBLIC_URL + '/signup', {
     name,
     email,
     password
@@ -50,7 +50,7 @@ export const signup = (name, email, password) => {
 }
 
 export const addTodo = (title, description) => {
-  return axiosInstance.post('/todo/add', {
+  return axiosInstance.post(process.env.PUBLIC_URL + '/todo/add', {
     title,
     description
   }).then(todo => {
@@ -60,7 +60,7 @@ export const addTodo = (title, description) => {
 
 export const listTodo = () => {
   // I have used post instead of get, read https://blog.teamtreehouse.com/the-definitive-guide-to-get-vs-post
-  return axiosInstance.post('/todo/list').then(todos => {
+  return axiosInstance.post(process.env.PUBLIC_URL + '/todo/list').then(todos => {
     return todos.data
   })
 }
@@ -77,14 +77,14 @@ export const updateTodo = (_id, important = null, done = null) => {
   if (done !== null) {
     fieldsToUpdate.done = done
   }
-  return axiosInstance.patch('/todo/update', fieldsToUpdate).then(todo => {
+  return axiosInstance.patch(process.env.PUBLIC_URL + '/todo/update', fieldsToUpdate).then(todo => {
     return todo.data
   })
 }
 
 export const deleteTodo = (_id) => {
   // I have used post instead of get, read https://blog.teamtreehouse.com/the-definitive-guide-to-get-vs-post
-  return axiosInstance.delete('/todo/delete', {
+  return axiosInstance.delete(process.env.PUBLIC_URL + '/todo/delete', {
     data: {
       _id
     }
