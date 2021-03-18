@@ -25,6 +25,7 @@ export const signout = () => {
 
 export const init = () => {
   return axiosInstance.post(process.env.PUBLIC_URL + '/init').then(user => {
+    console.log('init app success');
     return user.data
   })
 }
