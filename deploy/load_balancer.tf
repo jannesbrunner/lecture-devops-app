@@ -37,7 +37,7 @@ resource "aws_lb_listener" "todo_server" { # listening here and forward
 }
 
 resource "aws_security_group" "lb" {
-  description = "Allo access to Application Load Balancer"
+  description = "Allow access to Application Load Balancer"
   name        = "${local.prefix}-lb"
   vpc_id      = aws_vpc.main.id
 
