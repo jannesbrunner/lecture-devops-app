@@ -54,7 +54,7 @@ data "template_file" "app_container_definitions" {
 
   vars = {
     app_image        = var.ecr_image_server
-    db_image = var.ecr_image_db
+    db_image         = var.ecr_image_db
     log_group_name   = aws_cloudwatch_log_group.ecs_task_logs.name
     log_group_region = data.aws_region.current.name
     allowed_hosts    = aws_lb.todo_server.dns_name
@@ -99,10 +99,10 @@ resource "aws_security_group" "ecs_service" {
   }
 
   ingress { # allow incoming access to MongoDB from server container
-      from_port = 27017
-      to_port = 27017
-      protocol  = "tcp"
-      cidr_blocks = [
+    from_port = 27017
+    to_port   = 27017
+    protocol  = "tcp"
+    cidr_blocks = [
       aws_subnet.private_a.cidr_block,
       aws_subnet.private_b.cidr_block,
     ]
