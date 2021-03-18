@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const fs = require('fs');
 
 
 // utilize event emitter to indicate connection retries in logs
@@ -17,26 +16,16 @@ if( process.env.NODE_ENV === 'production' ){
     });
 }
 
-const dbUserPasswordRequired = process.env.DB_USERNAME && process.env.DB_PASSWORD;
-
-const ca = fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
-
-const mongodbURL = dbUserPasswordRequired ?
-`${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}` :
-`${process.env.DB_URL}`
-
-console.log('db_url:' + mongodbURL)
+console.log('db_url:' + process.env.DB_URL)
 console.log('db_username:' + process.env.DB_USERNAME)
 
 const mongooseInstance_ = mongoose.connect(
-    `mongodb://${mongodbURL}`,
+    process.env.DB_URL,
     {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
-        ssl: dbUserPasswordRequired,
-        sslValidate: true,
-        sslCA: ca,
+        ssl: false,
         useUnifiedTopology: true,
         heartbeatFrequencyMS: 1000 * 5,         // 1 sec * 5
         serverSelectionTimeoutMS: 1000 * 10     // 1 sec * 10
@@ -45,7 +34,7 @@ const mongooseInstance_ = mongoose.connect(
 
 mongooseInstance_
     .then(()=>{
-        process.env.NODE_ENV !== 'test' && console.log( `Connect established to database: mongodb://${ mongodbURL }` );
+        process.env.NODE_ENV !== 'test' && console.log( `Connect established to database: ${ process.env.DB_URL }` );
     })
     .catch(( err )=>{
         console.error( `Cannot connect to database: mongodb://${ mongodbURL }` );

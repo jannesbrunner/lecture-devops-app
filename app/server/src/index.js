@@ -13,13 +13,15 @@ let cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 5000;
 
+
+
 const corsOptions = {
-    origin: `http://localhost:${ port }`,
+    origin: `http://127.0.0.1:${ port }`,
     credentials: true
 };
 
 app.use(express.json());
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(cookieParser());
 

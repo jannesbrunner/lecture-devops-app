@@ -93,9 +93,11 @@ Build and Push:
 
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
-      when: manual # temp
+    - if: $CI_COMMIT_MESSAGE =~ /-no-build$/
+      when: never
     # We only want to Build and Push artifacts that survived test and lint stage.
     # Therefore we only Build and Push after a merge request gets merged in (commit) -> no build and push on merge request creation!
+    # if the commit contains "-no-build" then we skip the build process
 
 Staging Plan:
   stage: Staging Plan
@@ -108,7 +110,6 @@ Staging Plan:
     - terraform plan
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
-      when: manual # temp
     # master | production -> this makes sure that staging environment (master branch)
     # will at least always have the latest validated production terraform configuration
 
