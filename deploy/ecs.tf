@@ -54,9 +54,7 @@ data "template_file" "app_container_definitions" {
 
   vars = {
     app_image        = var.ecr_image_server
-    db_url           = var.db_url
-    db_username      = aws_docdb_cluster.main.master_username
-    db_password      = aws_docdb_cluster.main.master_password
+    db_image = var.ecr_image_db
     log_group_name   = aws_cloudwatch_log_group.ecs_task_logs.name
     log_group_region = data.aws_region.current.name
     allowed_hosts    = aws_lb.todo_server.dns_name
@@ -83,14 +81,14 @@ resource "aws_security_group" "ecs_service" {
   name        = "${local.prefix}-ecs-service"
   vpc_id      = aws_vpc.main.id
 
-  egress { # allow outgoing HTTPS
+  egress { # allow outgoing HTTPS for all containers (updating etc.)
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress { # allow access to AWS DocDB (MongoDB)
+  egress { # allow outgoin access to MongoDB container
     from_port = 27017
     to_port   = 27017
     protocol  = "tcp"
@@ -100,7 +98,17 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  ingress { # Allo incoming access to container port where server is running
+  ingress { # allow incoming access to MongoDB from server container
+      from_port = 27017
+      to_port = 27017
+      protocol  = "tcp"
+      cidr_blocks = [
+      aws_subnet.private_a.cidr_block,
+      aws_subnet.private_b.cidr_block,
+    ]
+  }
+
+  ingress { # Allo incoming access to container port where server is running from load balancer
     from_port = 3000
     to_port   = 3000
     protocol  = "tcp"
