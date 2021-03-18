@@ -3,13 +3,10 @@
         "name": "server",
         "image": "${app_image}",
         "essential": true,
-        "memoryReservation": 512,
+        "memoryReservation": 256,
         "environment": [
             {"name": "PORT", "value": "3000" },
-            {"name": "DB_URL", "value": "${db_url}"},
-            {"name": "DB_USERNAME", "value": "${db_username}"},
-            {"name": "DB_PASSWORD", "value": "${db_password}"},
-            {"name": "ALLOWED_HOSTS", "value": "${allowed_hosts}"}
+            {"name": "DB_URL", "value": "127.0.0.1:27017/todo-app"}
         ],
         "logConfiguration": {
             "logDriver": "awslogs",
@@ -23,6 +20,35 @@
             {
                 "containerPort": 3000,
                 "hostPort": 3000
+            }
+        ]
+    },
+
+    {
+        "name": "db",
+        "image": "${db_image}",
+        "essential": true,
+        "memoryReservation": 256,
+        "environment": [],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${log_group_name}",
+                "awslogs-region": "${log_group_region}",
+                "awslogs-stream-prefix": "mongodb"
+            }
+        },
+        "mountPoints": [
+            {
+                "readOnly": false,
+                "containerPath": "/data/db",
+                "sourceVolume": "db_data"
+            }
+        ],
+        "portMappings": [
+            {
+                "containerPort": 27017,
+                "hostPort": 27017
             }
         ]
     }
