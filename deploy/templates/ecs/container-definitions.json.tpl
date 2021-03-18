@@ -38,13 +38,6 @@
                 "awslogs-stream-prefix": "mongodb"
             }
         },
-        "mountPoints": [
-            {
-                "readOnly": false,
-                "containerPath": "/data/db",
-                "sourceVolume": "db_data"
-            }
-        ],
         "portMappings": [
             {
                 "containerPort": 27017,
