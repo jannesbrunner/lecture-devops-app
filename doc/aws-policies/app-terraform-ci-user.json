@@ -42,7 +42,7 @@
             "Action": [
                 "ecr:*"
             ],
-            "Resource": "arn:aws:ecr:us-east-1:*:repository/${PUT_IN_ECR_REPO_NAME}"
+            "Resource": "arn:aws:ecr:us-east-1:*:repository/*"
         },
         {
             "Sid": "AllowStateLockingAccess",
