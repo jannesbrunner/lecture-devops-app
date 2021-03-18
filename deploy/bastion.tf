@@ -22,10 +22,23 @@ resource "aws_iam_role" "bastion" {
 ### Bastion Server Policy Attachments to Bastion Rule
 
 # Give Bastion Server access to AWS ECR read only via AWS policy attachment
-resource "aws_iam_role_policy_attachment" "bastion_attach_policy" {
+resource "aws_iam_role_policy_attachment" "bastion_attach_policy_ec2" {
   role       = aws_iam_role.bastion.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
+
+# Give Bastion Server full read only access to CloudWatch logs
+resource "aws_iam_role_policy_attachment" "bastion_attach_policy_cwl" {
+  role       = aws_iam_role.bastion.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess"
+}
+
+# Give Bastion Server full read only access to CloudWatch
+resource "aws_iam_role_policy_attachment" "bastion_attach_policy_cw" {
+  role       = aws_iam_role.bastion.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+}
+
 
 ## more policy attachments might follow here...
 
