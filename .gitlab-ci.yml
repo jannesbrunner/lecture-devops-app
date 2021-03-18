@@ -42,7 +42,7 @@ Lint and Test Server:
   variables:
     DB_PORT: 27017
     DB_HOST: todo-app-db
-    DB_URL: todo-app-db:27017/todo-app
+    DB_URL: mongodb://todo-app-db:27017/todo-app
   script:
     - cd ./app/server
     - npm install
