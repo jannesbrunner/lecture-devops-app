@@ -37,7 +37,7 @@ mongooseInstance_
         process.env.NODE_ENV !== 'test' && console.log( `Connect established to database: ${ process.env.DB_URL }` );
     })
     .catch(( err )=>{
-        console.error( `Cannot connect to database: mongodb://${ mongodbURL }` );
+        console.error( `Cannot connect to database: mongodb://${ process.env.DB_URL }` );
         console.log(err, 'Error')
     });
 
