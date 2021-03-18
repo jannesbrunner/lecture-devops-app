@@ -38,7 +38,8 @@ programmatic and console access.
 - Primary key: ```LockID```
 - This will prevent conflicts if terraform runs in parallel (e.g. from your computer and CI/CD pipeline).
 
-## 6) Create an ECR Repo for the lecture-app
+## 6) Create an ECR Repos for the lecture-app and lecture-app-db
+- 1)
 - Create an ECR Repo called ```lecture-devops-app-server```
 - Enable ```scan on push```
 - Disable ```Tag immutability```
@@ -46,6 +47,13 @@ programmatic and console access.
 - - builds come from production and staging environment
 - - builds are tagged with git commit SHA and also latest (for latest build)
 
+- 2)
+- Create an ECR Repo called ```lecture-devops-app-db```
+- Enable ```scan on push```
+- Disable ```Tag immutability```
+- This ECR will store builds of the todo-app mongodb container
+- - builds come from production and staging environment
+- - builds are tagged with git commit SHA and also latest (for latest build)
 ## 7) Create Policy for CI IAM User
 - This Policy is for a user that gets programmatic access to AWS 
 - GitLab is using this IAM user with this policy to
@@ -55,11 +63,10 @@ programmatic and console access.
 - For security reasons CI account is limited to only needed access rights
   - A template aws security policy can be found here [app-terraform-ci-user.json](../doc/aws-policies/app-terraform-ci-user.json)
     - Replace every `${PUT_IN_UNIQUE_S3_BUCKET_NAME}` with the S3 Bucket name created in Step 4).
-    - Replace every `${PUT_IN_ECR_REPO_NAME}` with the AWS ECR Repo Name created in tep 6).
     - Replace every `${PUT_IN_DYNAMODB_NAME}` with the AWS DynamoDB table name created in Step 5).
   - CI user can fully access AWS EC2 but:
   - CI user cant create AWS EC2 resources greater than t2.micro 
-  - CI user can access ECR repository created in Step 6)
+  - CI user can access ECR repositories created in Step 6)
   - CI user can read and update the Terraform lock state in AWS dynamodb created in Step 5
 
 - Head over to your AWS Console -> IAM -> Policies -> Create Policy
@@ -96,7 +103,7 @@ you need to add your public ssh-key to AWS.
 ### Continue with terraform setup
 [go to terraform setup documentation](./setup-terraform.md)
 
-## 10) Add ECR Image URL to terraform config
+## 10) Add ECR Image URLs to terraform config
 Terraform needs to know the exact URL to your AWS ECR that is holding
 the built server image (including the client part). 
 
@@ -105,5 +112,9 @@ the built server image (including the client part).
 - Paste the value in [variables.tf](../deploy/variables.tf) like this 
   - variable "ecr_image_server"
   - default=${YOUR_ECR_URI}:latest
-- *Hint*: This gets overwritten during CI/CD jobs because there we use the specific build that is tagged by the git short SHA.
+- Copy the URI of "lecture-devops-app-db"
+- Paste the value in [variables.tf](../deploy/variables.tf) like this 
+  - variable "ecr_image_db"
+  - default=${YOUR_ECR_URI}:latest
+- *Hint*: These get overwritten during CI/CD jobs because there we use the specific build that is tagged by the git short SHA.
   - But for deploying from a developers machine oder from bastion server we have default value pointing to the latest tag.
