@@ -6,7 +6,8 @@
         "memoryReservation": 256,
         "environment": [
             {"name": "PORT", "value": "3000" },
-            {"name": "DB_URL", "value": "mongodb://127.0.0.1:27017/todo-app"}
+            {"name": "DB_URL", "value": "mongodb://127.0.0.1:27017/todo-app"},
+            {"name": "JWT_SECRET", "value": "myjwtsecret"}
         ],
         "logConfiguration": {
             "logDriver": "awslogs",
