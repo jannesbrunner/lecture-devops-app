@@ -79,7 +79,5 @@ be unique to the setup a developer is running.
 - **Hint**: You will need to set this variables via environment variables in GitLab. This is part of the GitLab setup.
   - GitLab will use these variables values in CI/CD pipeline jobs
   - Setting values in `terraform.tfvars` is for running terraform from a developer machine or bastion server
-  - **IMPORTANT FOR DB_URL:** Put in all after `mongodb://ldadbuser:<insertYourPassword>@` regarding the db_url Terraform variable
-    - You can get this value after documentDB creation in AWS Console.  
 
 Continue with [**GitLab Setup**](2-setup-gitlab.md) 

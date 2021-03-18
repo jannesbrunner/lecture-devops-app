@@ -36,22 +36,12 @@ With that being said: Every time you log-in again on AWS Educate you have to rep
   - AWS_SECRET_ACCESS_KEY_ID
 
 - Only set the following var once (regardless AWS Educate or Normal)
-  - ECR_REPO
+  - ECR_REPO_SERVER
     - ECR Repository URI (get it from https://console.aws.amazon.com/ecr/repositories)
     - e.g 742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server
-  - TF_VAR_db_user
-    - Username for accessing AWS DocumentDB
-    - **Hint**: Mask and protect the var!
-  - TF_VAR_db_password
-    - Password for accessing AWS DocumentDB
-    - **Hint**: Mask and protect the var!
-  
-  Set this variable after first deployment and update the cloud again with Terraform
-  - TV_VAR_db_url
-    - Connection string for connecting to AWS DocumentDB Cluster
-    - Get it from AWS Console -> DocumentDB -> Clusters -> lda-staging-docdb-cluster -> Connectivity & security
-    - **IMPORTANT:** Put in all after `mongodb://ldadbuser:<insertYourPassword>@` Part. 
-      - This contains DB User and DB Password and got set in `TF_VAR_db_user` and `TF_VAR_db_password`
-      - For security reasons this values get masked in GitLab. You only need to put the part after `@` in this variable.
+  - ECR_REPO_DB
+    - ECR Repository URI (get it from https://console.aws.amazon.com/ecr/repositories)
+    - e.g 742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-db
+
 
   

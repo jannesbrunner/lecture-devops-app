@@ -16,24 +16,16 @@ variable "contact" {
   description = "maintainer contact e-address"
 }
 
-variable "db_username" {
-  description = "Username for aws documentdb cluster instance"
-}
-
-variable "db_password" {
-  description = "Password for aws documentdb cluster instance"
-}
-
-variable "db_url" {
-  description = "Connection string of the AWS documentDB cluster"
-}
-
 variable "bastion_key_name" {
   default = "lda-app-devops-bastion"
 }
 
 variable "ecr_image_server" {
   description = "ECR image for server image"
-  default     = "742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server"
+  default     = "742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-server:latest"
 }
 
+variable "ecr_image_db" {
+  description = "ECR image for app db image"
+  default     = "742206682728.dkr.ecr.us-east-1.amazonaws.com/lecture-devops-app-db:latest"
+}

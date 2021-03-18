@@ -197,9 +197,18 @@ _Triggered by_ : Commit -> __Production__ <br/>
 - On local development (Environment 0) a MongoDB version 4.2.6 is running in a Docker Container. 
   - automatically provided by Docker-Compose (see [docker-compose.yml](../docker-compose.yml)).
 
-- In staging and production environment (managed by terraform) an AWS documented-db cluster gets allocated
-  - Per environment one doc-db-cluster having one doc-db-instance per availability zone (A,B)
-  - Hence, one cluster with 2 instances
+- ~~In staging and production environment (managed by terraform) an AWS documented-db cluster gets allocated~~
+  -~~ Per environment one doc-db-cluster having one doc-db-instance per availability zone (A,B)~~
+  - ~~Hence, one cluster with 2 instances~~
+- Instead of utilizing AWS documentDB for persistence, fallback to a simpler solution:
+  - a second container gets build and push to its one AWS ECR Repo (lecture-devops-app-db)
+  - Server and DB container running within the same AWS FARGATE Task (replica desired count = 2)
+- Why this change?
+  - Configuration in cloud environments (stag./prod.) are almost the same like in local-dev environment
+  - for the sake of the KISS principal
+  - AWS DocumentDB takes a very long time to spin up
+    - This is annoying and tedious with session time limited AWS Educate Account
+  - Connection frustrating errors while try to connect from server container to AWS documentDB Cluster
 
 ### Container Engine
 
