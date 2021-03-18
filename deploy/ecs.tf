@@ -108,13 +108,11 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  ingress { # Allo incoming access to container port where server is running from load balancer
-    from_port = 3000
-    to_port   = 3000
-    protocol  = "tcp"
-    security_groups = [
-      aws_security_group.lb.id
-    ]
+  ingress { # Allo incoming access to container port where server is running from internet
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = local.common_tags
