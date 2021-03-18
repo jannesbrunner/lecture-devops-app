@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   baseURL: process.env.PUBLIC_URL,
   withCredentials: true
 })
-/* eslint-enable */
+
 
 axiosInstance.interceptors.response.use(
   res => {
@@ -15,14 +15,14 @@ axiosInstance.interceptors.response.use(
   }
 )
 
-/* eslint-disable */
+
 export const signout = () => {
   return axiosInstance.post(process.env.PUBLIC_URL + '/logout').then(user => {
     // delete axiosInstance.defaults.headers.common["Authorization"];
     return user.data
   })
 }
-/* eslint-enable */
+
 export const init = () => {
   return axiosInstance.post(process.env.PUBLIC_URL + '/init').then(user => {
     return user.data
@@ -92,3 +92,4 @@ export const deleteTodo = (_id) => {
     return todo
   })
 }
+/* eslint-enable */
