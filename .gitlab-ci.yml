@@ -64,7 +64,7 @@ Validate Terraform:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^(master|production)$/ || $CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
-Build and Push:
+Build and Push Server:
   image: docker:18.09.7
     # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
     # https://gitlab.com/gitlab-org/charts/gitlab/-/issues/478
@@ -80,15 +80,39 @@ Build and Push:
     - pip3 install awscli
     - $(aws ecr get-login --no-include-email --region us-east-1)
     - docker pull $ECR_REPO_SERVER:latest || true
-    - docker pull $ECR_REPO_DB:latest || true
     - docker build --cache-from $ECR_REPO_SERVER:latest --compress -t $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA .
+    - docker push $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - docker tag $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA $ECR_REPO_SERVER:latest
+    - docker push $ECR_REPO_SERVER:latest
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
+    - if: $CI_COMMIT_MESSAGE =~ /-no-build$/
+      when: never
+    # We only want to Build and Push artifacts that survived test and lint stage.
+    # Therefore we only Build and Push after a merge request gets merged in (commit) -> no build and push on merge request creation!
+    # if the commit contains "-no-build" then we skip the build process
+
+Build and Push DB:
+  image: docker:18.09.7
+    # https://about.gitlab.com/blog/2019/07/31/docker-in-docker-with-docker-19-dot-03/
+    # https://gitlab.com/gitlab-org/charts/gitlab/-/issues/478
+  stage: Build and Push
+  services:
+   - docker:18.09.7-dind
+  before_script:
+    - docker info
+  tags:
+    - ownrunner
+  script:
+    - apk add py3-pip
+    - pip3 install awscli
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+    - docker pull $ECR_REPO_DB:latest || true
     - cd ./app/db
     - docker build --cache-from $ECR_REPO_DB:latest --compress -t $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA .
-    - docker push $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
     - docker push $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
-    - docker tag $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA $ECR_REPO_SERVER:latest
     - docker tag $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA $ECR_REPO_DB:latest
-    - docker push $ECR_REPO_SERVER:latest
     - docker push $ECR_REPO_DB:latest
 
   rules:
