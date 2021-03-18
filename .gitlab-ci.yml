@@ -79,7 +79,7 @@ Build and Push:
     - apk add py3-pip
     - pip3 install awscli
     - docker pull $ECR_REPO_SERVER:latest || true
-    - docker pull $ECR_REPO_db:latest || true
+    - docker pull $ECR_REPO_DB:latest || true
     - docker build --cache-from $ECR_REPO_SERVER:latest --compress -t $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA .
     - cd ./app/db
     - docker build --cache-from $ECR_REPO_DB:latest --compress -t $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA .
