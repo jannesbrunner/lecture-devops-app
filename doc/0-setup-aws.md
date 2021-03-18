@@ -39,15 +39,15 @@ programmatic and console access.
 - This will prevent conflicts if terraform runs in parallel (e.g. from your computer and CI/CD pipeline).
 
 ## 6) Create an ECR Repos for the lecture-app and lecture-app-db
-- 1)
 - Create an ECR Repo called ```lecture-devops-app-server```
 - Enable ```scan on push```
 - Disable ```Tag immutability```
 - This ECR will store builds of the todo-app server 
-- - builds come from production and staging environment
-- - builds are tagged with git commit SHA and also latest (for latest build)
+  - builds come from production and staging environment
+  - builds are tagged with git commit SHA and also latest (for latest build)
 
-- 2)
+<hr/>
+
 - Create an ECR Repo called ```lecture-devops-app-db```
 - Enable ```scan on push```
 - Disable ```Tag immutability```
@@ -100,9 +100,6 @@ you need to add your public ssh-key to AWS.
 - Click import key on the right hand top side
 - Name the key pair `lda-app-devops-bastion`
 - Input your **public** SSH-Key in the input field
-### Continue with terraform setup
-[go to terraform setup documentation](./setup-terraform.md)
-
 ## 10) Add ECR Image URLs to terraform config
 Terraform needs to know the exact URL to your AWS ECR that is holding
 the built server image (including the client part). 
@@ -118,3 +115,6 @@ the built server image (including the client part).
   - default=${YOUR_ECR_URI}:latest
 - *Hint*: These get overwritten during CI/CD jobs because there we use the specific build that is tagged by the git short SHA.
   - But for deploying from a developers machine oder from bastion server we have default value pointing to the latest tag.
+
+### Continue with terraform setup
+[go to terraform setup documentation](./setup-terraform.md)
