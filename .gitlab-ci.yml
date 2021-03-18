@@ -78,11 +78,16 @@ Build and Push:
   script:
     - apk add py3-pip
     - pip3 install awscli
-    - docker build --compress -t $ECR_REPO:$CI_COMMIT_SHORT_SHA .
+    - docker build --compress -t $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA .
+    - cd ./app/db
+    - docker build --compress -t $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA .
     - $(aws ecr get-login --no-include-email --region us-east-1)
-    - docker push $ECR_REPO:$CI_COMMIT_SHORT_SHA
-    - docker tag $ECR_REPO:$CI_COMMIT_SHORT_SHA $ECR_REPO:latest
-    - docker push $ECR_REPO:latest
+    - docker push $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - docker push $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
+    - docker tag $ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA $ECR_REPO_SERVER:latest
+    - docker tag $ECR_REPO_DB:$CI_COMMIT_SHORT_SHA $ECR_REPO_DB:latest
+    - docker push $ECR_REPO_SERVER:latest
+    - docker push $ECR_REPO_DB:latest
 
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
@@ -93,7 +98,8 @@ Staging Plan:
   stage: Staging Plan
   script:
     - cd deploy/
-    - export TF_VAR_ecr_image_api=$ECR_REPO:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_server=$ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_db=$ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
     - terraform init
     - terraform workspace select staging || terraform workspace new staging
     - terraform plan
@@ -106,7 +112,8 @@ Staging Apply:
   stage: Staging Apply
   script:
     - cd deploy/
-    - export TF_VAR_ecr_image_api=$ECR_EPO:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_server=$ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_db=$ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
     - terraform init
     - terraform workspace select staging
     - terraform apply -auto-approve
@@ -119,7 +126,8 @@ Production Plan:
   stage: Production Plan
   script:
     - cd deploy/
-    - export TF_VAR_ecr_image_api=$ECR_REPO:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_server=$ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_db=$ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
     - terraform init
     - terraform workspace select production || terraform workspace new production
     - terraform plan
@@ -130,7 +138,8 @@ Production Apply:
   stage: Production Apply
   script:
     - cd deploy/
-    - export TF_VAR_ecr_image_api=$ECR_EPO:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_server=$ECR_REPO_SERVER:$CI_COMMIT_SHORT_SHA
+    - export TF_VAR_ecr_image_db=$ECR_REPO_DB:$CI_COMMIT_SHORT_SHA
     - terraform init
     - terraform workspace select production
     - terraform apply -auto-approve
