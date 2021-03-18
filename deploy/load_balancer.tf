@@ -48,6 +48,13 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+   ingress { # public internet into load balancer https
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress { # load balancer to application
     protocol    = "tcp"
     from_port   = 3000
