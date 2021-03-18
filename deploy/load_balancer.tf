@@ -50,8 +50,8 @@ resource "aws_security_group" "lb" {
 
   egress { # load balancer to application
     protocol    = "tcp"
-    from_port   = "3000"
-    to_port     = "3000"
+    from_port   = 3000
+    to_port     = 3000
     cidr_blocks = ["0.0.0.0/0"]
   }
 

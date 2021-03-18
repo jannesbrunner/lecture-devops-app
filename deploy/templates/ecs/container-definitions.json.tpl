@@ -6,7 +6,7 @@
         "memoryReservation": 256,
         "environment": [
             {"name": "PORT", "value": "3000" },
-            {"name": "DB_URL", "value": "127.0.0.1:27017/todo-app"}
+            {"name": "DB_URL", "value": "mongodb://127.0.0.1:27017/todo-app"}
         ],
         "logConfiguration": {
             "logDriver": "awslogs",

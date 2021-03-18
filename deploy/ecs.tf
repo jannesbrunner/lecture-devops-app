@@ -108,7 +108,7 @@ resource "aws_security_group" "ecs_service" {
     ]
   }
 
-  ingress { # Allo incoming access to container port where server is running from internet
+  ingress { # Allow incoming access to container port where server is running from internet
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
