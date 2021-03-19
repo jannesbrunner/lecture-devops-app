@@ -20,6 +20,8 @@ const corsOptions = {
     credentials: true
 };
 
+app.use(require('express-status-monitor')());
+
 app.use(express.json());
 // app.use(cors(corsOptions));
 
