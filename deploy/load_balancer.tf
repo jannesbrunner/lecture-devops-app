@@ -13,7 +13,7 @@ resource "aws_lb" "todo_server" {
 
 resource "aws_lb_target_group" "todo_server" {
   name        = "${local.prefix}-server"
-  protocol    = "HTTPS"
+  protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
   port        = 3000
@@ -27,8 +27,8 @@ resource "aws_lb_target_group" "todo_server" {
 
 resource "aws_lb_listener" "todo_server" { # listening here and forward
   load_balancer_arn = aws_lb.todo_server.arn
-  port              = 443
-  protocol          = "HTTPS"
+  port              = 80
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"

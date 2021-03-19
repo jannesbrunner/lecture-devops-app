@@ -46,20 +46,6 @@ up. Pleaser refer to the setup documentations:
 * [Amazon Web Services Setup](./doc/0-setup-aws.md) 
 * [Terraform Setup](./doc/1-setup-terraform.md)
 * [GitLab Repository with CI/CD Setup](./doc/2-setup-gitlab.md) 
-
-### Serving over HTTPS 
-
-The server runs via https (port 3000) and is using a self-signed certificate.
-You need to specify that you are using "https" in your address bar.
-This can cause alarming prompts when opening up the server frontend with a webbrowser.
-You can safely bypass this warning. However, to remove the warning you have to add 
-the server [certificate file](./app/server/src/server.cert) to trusted ones on your machine.
-<br/>
-Here is how:
-
-- [Windows 10](https://support.kaspersky.com/CyberTrace/1.0/en-US/174127.htm)
-- [Linux](https://unix.stackexchange.com/questions/90450/adding-a-self-signed-certificate-to-the-trusted-list)
-- [MacOS](https://tosbourn.com/getting-os-x-to-trust-self-signed-ssl-certificates/)
 ### Commands
 
 You can use make to use the following commands. If you haven't make installed,

@@ -28,8 +28,7 @@ services:
       context: .
       dockerfile: dockerfile
     ports:
-      - ${SERVER_PORT_HTTP}:${SERVER_PORT_HTTP}
-      - ${SERVER_PORT_HTTPS}:${SERVER_PORT_HTTPS} # collected from .env file
+      - ${PORT}:${PORT} # collected from .env file
     networks:
       - todo-app-dev
     command: "npm run start:container-dev"

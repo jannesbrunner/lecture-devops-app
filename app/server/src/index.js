@@ -1,7 +1,4 @@
 const path = require( 'path' );
-const fs = require('fs');
-const https = require('https')
-const http = require('https')
 
 const express = require('express');
 const cors = require('cors');
@@ -14,21 +11,17 @@ const envRoute = require('./routes/env.js');
 let cookieParser = require('cookie-parser');
 
 const app = express();
-const httpPort = process.env.SERVER_HTTP_PORT || 80;
-const httpsPort = process.env.SERVER_HTTPS_PORT || 443;
+const port = process.env.PORT || 5000;
+
 
 
 const corsOptions = {
-    origin: `https://127.0.0.1:${ httpPort }`,
+    origin: `http://127.0.0.1:${ port }`,
     credentials: true
 };
 
-const privateKey = fs.readFileSync(path.resolve(__dirname) + '/server.key').toString();
-const certificate = fs.readFileSync(path.resolve(__dirname) + '/server.cert').toString();
-const credentials = {key: privateKey, cert: certificate};
-
 app.use(express.json());
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
@@ -41,14 +34,6 @@ app.use(helmet.contentSecurityPolicy({
     }
 }));
 
-app.use(function(req,resp,next){
-    if (req.headers['x-forwarded-proto'] == 'http') {
-        return resp.redirect(301, 'https://' + req.headers.host + '/');
-    } else {
-        return next();
-    }
-  });
-
 app.use(todoRoutes);
 app.use(userRoutes);
 app.use('/', express.static(path.resolve(__dirname, `./public`)));
@@ -58,22 +43,11 @@ app.use(envRoute);
 // fallback and catches everything else
 app.use(errorRoutes);
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
-
 (async function main(){
     try{
-
         await new Promise( (__ful, rej__ )=>{
-            httpServer.listen(httpPort, function(){
-                console.log( `ToDo server is up on port ${ httpPort } with http`);
-                __ful();
-            }).on( 'error', rej__);
-        });
-
-        await new Promise( (__ful, rej__ )=>{
-            httpsServer.listen(httpsPort, function(){
-                console.log( `ToDo server is up on port ${ httpsPort } with https`);
+            app.listen(port, function(){
+                console.log( `ToDo server is up on port ${ port }`);
                 __ful();
             }).on( 'error', rej__);
         });
