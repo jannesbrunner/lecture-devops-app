@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user');
 const errorRoutes = require('./routes/error');
 const envRoute = require('./routes/env.js');
 let cookieParser = require('cookie-parser');
+const auth = require('http-auth');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -20,7 +21,14 @@ const corsOptions = {
     credentials: true
 };
 
-app.use(require('express-status-monitor')());
+const basic = auth.basic({realm: 'Monitor Area'}, function(user, pass, callback) {
+    callback(user === 'admin' && pass === process.env.ADMIN_PW);
+  });
+
+  // Set '' to config path to avoid middleware serving the html page (path must be a string not equal to the wanted route)
+  const statusMonitor = require('express-status-monitor')({ path: '' });
+  app.use(statusMonitor.middleware); // use the "middleware only" property to manage websockets
+  app.get('/status', basic.check(statusMonitor.pageRoute)); // use the pageRoute property to serve the dashboard html page
 
 app.use(express.json());
 // app.use(cors(corsOptions));

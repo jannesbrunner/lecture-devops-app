@@ -106,7 +106,7 @@ You can use the following shortcut commands on a local developer machine:
 #### locally
 
 - If app is running
-- visit [http://localhost:3000/status] //TODO
+- visit [http://localhost:3000/status]
   - [Express Status Monitor](https://github.com/RafalWilinski/express-status-monitor)
   - Secured with http-auth: **USER**: admin, **PW**: `${ADMIN_PW}` (env var)
 - check console output
