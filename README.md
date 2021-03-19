@@ -67,6 +67,11 @@ cd in project root. With make, docker and docker-compose installed use:
 - Spin up project locally
 - access running app via [http://localhost:3000]
 
+- If you make changes to the client or server part:
+  - Shutdown running server, then
+  - `$ make dev-update`
+  - `$ make dev-start` to start again
+
 #### Test Project locally
 
 cd in project root. With make, docker and docker-compose installed use: 
@@ -103,11 +108,12 @@ You can use the following shortcut commands on a local developer machine:
 - If app is running
 - visit [http://localhost:3000/status] //TODO
   - [Express Status Monitor](https://github.com/RafalWilinski/express-status-monitor)
-  - Secured with http-auth: **USER**: admin, **PW**: testtest
+  - Secured with http-auth: **USER**: admin, **PW**: `${ADMIN_PW}` (env var)
 - check console output
   
 #### Cloud (AWS)
 
+**Console Outputs**
 - All console output gets combined into one log-group
 - This is made by AWS CloudWatch Logs
 - You can access these logs via AWS Console oder by connecting into Bastion server
@@ -116,6 +122,14 @@ You can use the following shortcut commands on a local developer machine:
     - ssh into it with `$ ec2-user@ec2-18-207-193-234.compute-1.amazonaws.com`
     - check [AWS Setup](./doc/0-setup-aws.md) for adding secure SSH Key
   - Check [AWS CLI logs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/logs/index.html)
+
+#### Prometheus
+
+- **WIP**: Prometheus server running on Bastion server per environment
+- Prometheus clients running
+  - Server Container
+  - DB Container
+- *Not yet implemented*
 
 ### Helpers 
 
@@ -140,6 +154,14 @@ Here is how:
 - [Windows 10](https://support.kaspersky.com/CyberTrace/1.0/en-US/174127.htm)
 - [Linux](https://unix.stackexchange.com/questions/90450/adding-a-self-signed-certificate-to-the-trusted-list)
 - [MacOS](https://tosbourn.com/getting-os-x-to-trust-self-signed-ssl-certificates/)
+
+**Future thoughts here:**
+
+- User AWS Route53 to claim a real domain
+- assign subdomains for staging environment
+  - `staging.lda-app.example` = staging environment
+  - `lda-app.example` = production environment
+- Install certificate on Route53 to serve everything via https
 
 ### Purge
 

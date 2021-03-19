@@ -44,6 +44,10 @@ dev-test-client:
 dev-purge:
 	docker-compose down && docker-compose rm
 
+.PHONY: dev-update
+dev-update:
+	docker-compose build
+
 .PHONY: tf-init
 tf-init:
 	docker-compose -f deploy/docker-compose.yml run --rm terraform init
