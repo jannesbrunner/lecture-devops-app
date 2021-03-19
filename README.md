@@ -12,10 +12,10 @@ For more information regarding the app, please take a look into its [README](./a
 
 The `Makefile` in this directory can be seen as the main entry point for this repository. It's meant to locally run the
 application in a container environment and also dispatch commands to terraform that is in control of orchestrating the 
-AWS cloud. 
+AWS cloud.
 </br>
 
-You can use make to use the following upcoming make commands in following sections. If you haven't make installed,
+You can use make to easily make use of upcoming make commands in following sections. If you haven't make installed,
 please take a look at the [makefile](Makefile) and copy paste needed commands. </br>
 
 ### Prerequisites

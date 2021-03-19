@@ -65,7 +65,7 @@ Terraform is used on a developers machine, on bastion servers in the cloud and i
 - Continuous Deployment (CD)
 
 For building, archiving and serving the application (means server with client + database), 
-the whole application gets containerized in OCI-Containers build, tagged and pushed to repositories 
+the whole application gets containerized in OCI-Containers builds, tagged and pushed to repositories 
 (that is holding different versions coupled with git commit short-SHA) by [Docker](https://docker.io)
 The choice for containers over virtual machines or running the code directly is emphasized with
 - Containers are lightweight
@@ -74,6 +74,7 @@ The choice for containers over virtual machines or running the code directly is 
 
 For provisioning the project is utilizing AWS Cloudwatch through a bastion server
 - Alongside with prometheus (WIP)
+- The running app itself is offering a `/status` endpoint (secured) for provisioning
 
 
 ## Environments
@@ -113,17 +114,14 @@ This one aims to establish a reliable local development environment on a develop
   - .env => variables set here get used by docker-compose to create dev (server/db) with set configuration
 #### Pipeline
 
-**Trigger**: Manual CLI Command
+**Trigger**: Manual CLI Commands / no strict order
 
 1. Run Linting 
-If successful: 
 2. Build
 3. Run Tests
 4. Allocate infrastructure locally via containers
 
 App is reachable via dev server running on localhost:3000
-
-- Supervision insights is reduced or not available. 
 
 ### Staging 1 
 #### Description
@@ -148,8 +146,8 @@ If successful:
 6. Apply Staging (Terraform)
 
 
-- App running in staging environment accessible via FQDN (Terraform output)
-- Bastion Server running in staging environment accessible via FQDN (Terraform output)
+- App running in staging environment accessible via FQDN (Terraform Apply output)
+- Bastion Server running in staging environment accessible via FQDN (Terraform Apply output)
   - See result of terraform Apply job for getting these information
 
 ### Production 2
