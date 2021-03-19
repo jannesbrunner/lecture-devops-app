@@ -1,4 +1,5 @@
 # DevOps Concept
+
 - [DevOps Concept](#devops-concept)
   - [Overall Idea](#overall-idea)
   - [Environments](#environments)
@@ -9,6 +10,7 @@
       - [Description](#description-1)
       - [Pipeline](#pipeline-1)
     - [Production 2](#production-2)
+      - [Description](#description-2)
       - [Pipeline](#pipeline-2)
   - [Lifecyle (Automation Steps)](#lifecyle-automation-steps)
     - [Pipeline Stages:](#pipeline-stages)
@@ -151,6 +153,9 @@ If successful:
   - See result of terraform Apply job for getting these information
 
 ### Production 2
+#### Description
+- This environment is allocated and set up in an AWS cloud environment (VPC). 
+- App is served here as production release 
 
 **Trigger**: Merge or Commit into Branch "Production" 
 
@@ -212,6 +217,8 @@ There are 5 stages in the pipeline in total:
 
 Test and Lint -> Build and Push -> Staging _or_ Production Plan -> Staging _or_ Production Apply -> Destroy (Manual Trigger) (staging _or_ production environment)
 
+![Pipeline visualization](./pics/pipeline.png "devOps Pipeline")
+
 #### 1: Test and Lint
 
 _Triggered by_ : Merge Request or Commit -> __Master__ or __Production__ <br/>
@@ -255,7 +262,9 @@ _Triggered by_ : Commit -> __Production__ <br/>
 
 ## Architecture
 
-*INSERT Architecture PICTURE HERE* <br/>
+![devOps Architecture](./diagrams/infra.svg)
+
+<br/>
 
 ### Load Balancer 
 
