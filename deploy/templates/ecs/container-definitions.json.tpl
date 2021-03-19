@@ -7,7 +7,8 @@
         "environment": [
             {"name": "PORT", "value": "3000" },
             {"name": "DB_URL", "value": "mongodb://127.0.0.1:27017/todo-app"},
-            {"name": "JWT_SECRET", "value": "myjwtsecret"}
+            {"name": "JWT_SECRET", "value": "myjwtsecret"},
+            {"name": "ADMIN_PW", "value": "mysecretpw"}
         ],
         "logConfiguration": {
             "logDriver": "awslogs",
