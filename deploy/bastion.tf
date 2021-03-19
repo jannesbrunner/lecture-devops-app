@@ -22,7 +22,7 @@ resource "aws_iam_role" "bastion" {
 ### Bastion Server Policy Attachments to Bastion Rule
 
 # Give Bastion Server access to AWS ECR read only via AWS policy attachment
-resource "aws_iam_role_policy_attachment" "bastion_attach_policy_ec2" {
+resource "aws_iam_role_policy_attachment" "bastion_attach_policy" {
   role       = aws_iam_role.bastion.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
